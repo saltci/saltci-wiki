@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    <title>Redis快速上手 | Saltci Wiki</title>
+    
+    
+        <meta name="keywords" content="redis">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Redis快速入门Redis安装和使用安装和启动1234# ubuntu安装redis-serversudo apt-get install redis-server# 服务端启动sudo /etc/init.d/redis-server start [,status,stop,restart] 客户端连接12345redis-cli -h &amp;lt;ip地址&amp;gt; -p &amp;lt;端口&amp;gt;#">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis快速上手">
+<meta property="og:url" content="http://saltci.xyz/Database/Redis/Redis快速上手/index.html">
+<meta property="og:site_name" content="Saltci Wiki">
+<meta property="og:description" content="Redis快速入门Redis安装和使用安装和启动1234# ubuntu安装redis-serversudo apt-get install redis-server# 服务端启动sudo /etc/init.d/redis-server start [,status,stop,restart] 客户端连接12345redis-cli -h &amp;lt;ip地址&amp;gt; -p &amp;lt;端口&amp;gt;#">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-11-27T07:02:13.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis快速上手">
+<meta name="twitter:description" content="Redis快速入门Redis安装和使用安装和启动1234# ubuntu安装redis-serversudo apt-get install redis-server# 服务端启动sudo /etc/init.d/redis-server start [,status,stop,restart] 客户端连接12345redis-cli -h &amp;lt;ip地址&amp;gt; -p &amp;lt;端口&amp;gt;#">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Saltci Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-156011359-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?36d3b8fdaaf79741acc88f3416e00bf1";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Saltci Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Database
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MongoDB
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/MongoDB/MongDB常用命令/">MongoDB常用命令</a></li>  <li class="file"><a href="/Database/MongoDB/Python操作MongoDB/">Python操作MongoDB</a></li>  <li class="file"><a href="/Database/MongoDB/mongoengine/">mongoengine</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file active"><a href="/Database/Redis/Redis快速上手/">Redis快速上手</a></li>  <li class="file"><a href="/Database/Redis/Python操作Redis/">Python操作redis</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            DevOps
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Docker/Docker使用指南/">Docker使用指南</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kubernetes
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Kubernetes/Kubernetes基本概念/">Kubernetes基本概念与使用</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/DevOps/YAML/">YAML</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Git
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Git/git常用命令总结/">git常用命令总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Linux/crontab命令/">crontab命令</a></li>  <li class="file"><a href="/Linux/lsof命令/">lsof命令</a></li>  <li class="file"><a href="/Linux/wget命令/">wget命令</a></li>  <li class="file"><a href="/Linux/shell脚本编程/">shell脚本编程</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            data_analysis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Python/data_analysis/numpy/">numpy</a></li>  <li class="file"><a href="/Python/data_analysis/jupyter_notebook/">jupyter_notebook常用指南</a></li>  <li class="file"><a href="/Python/data_analysis/pandas/">pandas</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/Python/time和datetime模块/">time和datetime模块</a></li>  <li class="file"><a href="/Python/Python内置函数/">Python内置函数</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/index/">Welcome Saltci's Wiki Site</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-Database/Redis/Redis快速上手" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Database/">Database</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Database/Redis/">Redis</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/redis/">redis</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/Database/Redis/Redis快速上手/">
+            <time datetime="2020-02-07T04:36:00.000Z" itemprop="datePublished">2020-02-07</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/raw/hexo/source/_posts/Database/Redis/Redis快速上手.md" rel="external nofollow noopener noreferrer" target="_blank"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/edit/hexo/source/_posts/Database/Redis/Redis快速上手.md" rel="external nofollow noopener noreferrer" target="_blank"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/commits/hexo/source/_posts/Database/Redis/Redis快速上手.md" rel="external nofollow noopener noreferrer" target="_blank"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Redis快速上手
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">Catalogue</strong>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis快速入门"><span class="toc-number">1.</span> <span class="toc-text">Redis快速入门</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis安装和使用"><span class="toc-number">1.1.</span> <span class="toc-text">Redis安装和使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串的创建，查询和修改"><span class="toc-number">1.2.</span> <span class="toc-text">字符串的创建，查询和修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列表的创建，查询和修改"><span class="toc-number">1.3.</span> <span class="toc-text">列表的创建，查询和修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集合的创建，查询和修改"><span class="toc-number">1.4.</span> <span class="toc-text">集合的创建，查询和修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#哈希表的功能和应用"><span class="toc-number">1.5.</span> <span class="toc-text">哈希表的功能和应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发布消息-订阅频道"><span class="toc-number">1.6.</span> <span class="toc-text">发布消息/订阅频道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#有序集合"><span class="toc-number">1.7.</span> <span class="toc-text">有序集合</span></a></li></ol></li></ol>
+                </div>
+            
+        
+        
+            <h1 id="Redis快速入门"><a href="#Redis快速入门" class="headerlink" title="Redis快速入门"></a>Redis快速入门</h1><h2 id="Redis安装和使用"><a href="#Redis安装和使用" class="headerlink" title="Redis安装和使用"></a>Redis安装和使用</h2><p><strong>安装和启动</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> ubuntu安装redis-server</span><br><span class="line">sudo apt-get install redis-server</span><br><span class="line"><span class="meta">#</span> 服务端启动</span><br><span class="line">sudo /etc/init.d/redis-server start [,status,stop,restart]</span><br></pre></td></tr></table></figure></p>
+<p><strong>客户端连接</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h &lt;ip地址&gt; -p &lt;端口&gt;</span><br><span class="line"><span class="meta">#</span> 默认连接本机的6379端口</span><br><span class="line">redis-cli</span><br><span class="line">127.0.0.1:6379&gt;ping</span><br><span class="line">PONG</span><br></pre></td></tr></table></figure></p>
+<p><strong>设置连接密码</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 修改配置文件中 requirepass &lt;password&gt;</span><br><span class="line">requirepass &lt;yourpassword&gt;</span><br><span class="line"><span class="meta">#</span> linux 重启服务</span><br><span class="line">sudo /etc/init.d/redis-server restart</span><br><span class="line"><span class="meta">#</span> window 重启服务</span><br><span class="line">redis-server.exe redis.windows.conf</span><br><span class="line"><span class="meta">#</span> 测试连接</span><br><span class="line">redis -h 127.0.0.1 -p 6379 -a 123456</span><br></pre></td></tr></table></figure></p>
+<p><strong>设置远程连接</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 修改bind 127.0.0.1,注释掉bind即允许所有ip访问</span><br><span class="line">bind 14.68.225.22 127.0.0.1</span><br><span class="line"><span class="meta">#</span> 修改保护模式</span><br><span class="line">protected-mode no</span><br><span class="line"><span class="meta">#</span> 重启redis服务</span><br><span class="line">sudo /etc/init.d/redis-server restart</span><br><span class="line"><span class="meta">#</span> 测试连接</span><br><span class="line">redis -h 14.68.225.22 -p 6379 -a 123456</span><br></pre></td></tr></table></figure></p>
+<p><strong>禁用危险命令</strong></p>
+<blockquote>
+<p>Redis中默认开启了一些非常高权限的一些命令，使用这些命令，轻则清空Redis，重则写入挖矿木马甚至是SSH key公钥，从而控制服务器<br>通过修改Redis配置文件，可以对一些危险命令进行改名或者禁用，从而降低安全风险</p>
+</blockquote>
+<p>1.打开Redis配置文件，添加如下内容:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rename-command CONFIG &quot;&quot;</span><br><span class="line">rename-command FLUSHDB sdfaksdfjkasd</span><br><span class="line">rename-command FLUSHALL SDFKSDD</span><br><span class="line">rename-command PEXPIRE OKASETTW</span><br><span class="line">rename-command SHUTDOWN &quot;&quot;</span><br><span class="line">rename-command BGREWRITEAOF SEWERWEFSDF</span><br><span class="line">rename-command BGSAVE ASDFPEWE</span><br><span class="line">rename-command SAVE ASDFKLEWE</span><br><span class="line">rename-command DEBUG &quot;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>2.如果把命令重命名为空字符串，表示禁用这个命令。</p>
+<p><strong>通用命令，适用于所有数据类型</strong></p>
+<ul>
+<li><code>select &lt;number&gt;</code>: 切换库(number的值0-15之间的数字)</li>
+<li><code>keys *</code>: 查看所有键,如<code>keys user*</code>(查看user开头的键)</li>
+<li><code>TYPE key</code>: 键类型</li>
+<li><code>exists key</code>: 键是否存在</li>
+<li><code>del key</code>: 删除键</li>
+<li><code>rename key newkey</code>: 重命名键</li>
+<li><code>flushdb</code>: 清除当前库中所有数据(慎用)</li>
+<li><code>flushall</code>: 清除所有库中所有数据(慎用)</li>
+</ul>
+<h2 id="字符串的创建，查询和修改"><a href="#字符串的创建，查询和修改" class="headerlink" title="字符串的创建，查询和修改"></a>字符串的创建，查询和修改</h2><p>字符串(<code>Strings</code>)是<code>Redis</code>的基本数据结构之一，它由<code>key</code>和<code>value</code>两部分组成。   </p>
+<p><strong>创建字符串</strong><br>语法:<code>set key value</code></p>
+<ul>
+<li>key可以是数字，大小写字母，下划线或者中文</li>
+<li>value可以是任意内容<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set give_me_a_word OK</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>查询字符串</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keys *</span><br></pre></td></tr></table></figure></p>
+<p><strong>读取字符串</strong><br>如果获取一个不存在的key，则会返回<code>(nil)</code><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get give_me_a_word</span><br></pre></td></tr></table></figure></p>
+<p><strong>修改key里面的值</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 如果Redis不存在这个key则创建，存在这个key使用新的值覆盖旧值</span><br><span class="line">set user_data New</span><br><span class="line"><span class="meta">#</span> 使用nx参数，当key不存在时创建，当key存在时放弃操作</span><br><span class="line">set user_data abc NX</span><br><span class="line"><span class="meta">#</span> 给字符串的末尾加上其他字符串</span><br><span class="line">append user_data abc</span><br><span class="line"><span class="meta">#</span> 如果值的内容有空格，需要用引号包起来</span><br><span class="line">set user_data "word1 word2 word3"</span><br></pre></td></tr></table></figure></p>
+<p><strong>数值操作</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1.整数操作</span><br><span class="line"><span class="meta">#</span> 让key里的数字加1</span><br><span class="line">incr focus</span><br><span class="line"><span class="meta">#</span> 让key里的数字减1</span><br><span class="line">decr focus</span><br><span class="line"><span class="meta">#</span> 让key的数字增加100</span><br><span class="line">incrby focus 100</span><br><span class="line"><span class="meta">#</span> 让key里的数字减少100</span><br><span class="line">decrby focus 100</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 2.浮点数操作</span><br><span class="line">incrbyfloat key step</span><br></pre></td></tr></table></figure></p>
+<p><strong>string命令汇总</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1.字符串操作</span><br><span class="line">set key value</span><br><span class="line">set key value nx</span><br><span class="line">get key</span><br><span class="line"><span class="meta">#</span> 同时设置多个key-value</span><br><span class="line">mset key1 value1 key2 value2 key3 value3</span><br><span class="line"><span class="meta">#</span> 同时获取多个key-value</span><br><span class="line">mget key1 key2 key3</span><br><span class="line"><span class="meta">#</span> 设置过期时间,过了日期就自动销毁,ex秒 px毫秒</span><br><span class="line">set key value ex seconds</span><br><span class="line"><span class="meta">#</span> 查询key的过期时间还剩多少秒</span><br><span class="line">ttl key # 没有设置过期时间返回-1;key已经过期返回-2</span><br><span class="line"><span class="meta">#</span> 获取长度</span><br><span class="line">strlen key</span><br><span class="line"><span class="meta">#</span> 2.数字操作</span><br><span class="line">incr</span><br><span class="line">decr</span><br><span class="line">incrby</span><br><span class="line">decrby</span><br><span class="line">incrbyfloat key number</span><br><span class="line"><span class="meta">#</span> 3.设置过期时间的两种方式</span><br><span class="line"><span class="meta">#</span> 方式一</span><br><span class="line">set key value ex 3</span><br><span class="line"><span class="meta">#</span> 方式二</span><br><span class="line">set key value</span><br><span class="line">expire key 5 # 秒</span><br><span class="line">pexpire key 5 # 毫秒</span><br><span class="line"><span class="meta">#</span> 4.查看存活时间</span><br><span class="line">ttl key</span><br><span class="line"><span class="meta">#</span> 5.删除过期</span><br><span class="line">persist key</span><br><span class="line"><span class="meta">#</span> 返回旧值并设置新值(如果键不存在，就创建并赋值)</span><br><span class="line">getset key value</span><br></pre></td></tr></table></figure></p>
+<h2 id="列表的创建，查询和修改"><a href="#列表的创建，查询和修改" class="headerlink" title="列表的创建，查询和修改"></a>列表的创建，查询和修改</h2><p>列表（<code>List</code>）是<code>Redis</code>中的另一种数据结构。</p>
+<p><strong>插入数据</strong><br>列表分左右两个方向，所以可以从左右两侧插入。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1.从列表左侧插入数据</span><br><span class="line">lpush example_list hello</span><br><span class="line"><span class="meta">#</span> 如果有多个value，使用空格隔开</span><br><span class="line">lpush example_list how are you</span><br><span class="line"><span class="meta">#</span> 如果value本身有空格，使用引号包起来</span><br><span class="line">lpush example_list "are you ok" fine thank you</span><br><span class="line"><span class="meta">#</span> 2.从列表右侧插入数据</span><br><span class="line">rpush example_list_right 你好</span><br><span class="line">rpush example_list_right 请问贵姓 免贵姓王</span><br><span class="line">rpush example_list_right "幸会 幸会" "久仰 久仰"</span><br></pre></td></tr></table></figure></p>
+<p><strong>查看数据</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1.查看列表的长度</span><br><span class="line">llen key</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 2.根据索引查看数据,0代表最左边的数据，-1代表最右边的数据</span><br><span class="line"><span class="meta">#</span> 查看索引为6的数据</span><br><span class="line">lrange example_list 6 6</span><br><span class="line"><span class="meta">#</span> 查看索引从2(包括2)到5（包括5）的数据</span><br><span class="line">lrange example_list 2 5</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 3.查看列表所有数据</span><br><span class="line"><span class="meta">#</span> 不要贸然列出列表里面的所有数据，如果一个列表内有上百万条数据，贸然列出所有数据可能会导致大量数据输出瞬间耗尽系统IO资源</span><br><span class="line">lrange key 0 -1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 4.弹出数据,在弹出数据同时，被弹出的这个数据会从列表中删除</span><br><span class="line"><span class="meta">#</span> 从左边弹出数据</span><br><span class="line">lpop key</span><br><span class="line"><span class="meta">#</span> 从右边弹出数据</span><br><span class="line">rpop key</span><br></pre></td></tr></table></figure></p>
+<p><strong>修改数据</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lset key index 新的值</span><br></pre></td></tr></table></figure></p>
+<p><strong>删除多余的信息</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 格式: ltrim key &lt;起始位置&gt; &lt;截至位置&gt;</span><br><span class="line"><span class="meta">#</span> 使用ltrim命令删除多余的信息，只保留列表最右侧的20条信息</span><br><span class="line">ltrim chat_list -1 -20</span><br></pre></td></tr></table></figure></p>
+<h2 id="集合的创建，查询和修改"><a href="#集合的创建，查询和修改" class="headerlink" title="集合的创建，查询和修改"></a>集合的创建，查询和修改</h2><p><code>Redis</code>的集合与列表一样可以存放很多数据，但不同之处在于:集合里面的数据不能重复，也没有顺序</p>
+<p><strong>插入数据</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> sadd key value1 value2 value3</span><br><span class="line">sadd example_set hello</span><br><span class="line">sadd example_set 1 2.0 three</span><br><span class="line">sadd example_set "thank you" "you are welcome"</span><br></pre></td></tr></table></figure></p>
+<p><strong>读取数据</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1.查询集合里面元素的数量:scard key</span><br><span class="line">scard example_set</span><br><span class="line"><span class="meta">#</span> 2.从集合中获取数据,spop命令会随机获取集合中的数据:spop key count</span><br><span class="line"><span class="meta">#</span> 获取一条数据后，这一条数据就会从集合中删除</span><br><span class="line">spop example_set</span><br><span class="line">spop example_set 3</span><br><span class="line">spop example_set 1000</span><br><span class="line"><span class="meta">#</span> 3.获取集合中所有数据：smembers key,该命令不会删除数据，但如果集合中数据量极大，慎用</span><br><span class="line">smembers example_set</span><br><span class="line"><span class="meta">#</span> 4.判断集合中是否包含某个元素</span><br><span class="line"><span class="meta">#</span> sadd命令在遇到数据已存在时会返回0，数据不存在则把数据插入之后返回1</span><br><span class="line"><span class="meta">#</span> 单纯检查数据是否在集合中，可以使用sismember: sismember key value</span><br><span class="line"><span class="meta">#</span> 如果数据存在返回1，反之则返回0</span><br><span class="line">sismember example_set 2</span><br></pre></td></tr></table></figure></p>
+<p><strong>删除数据</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 使用srem命令，从集合中删除指定数据:srem key value1 value2 value3</span><br><span class="line">srem example_set "thank you"</span><br></pre></td></tr></table></figure></p>
+<p><strong>集合的交集</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 在redis中，求集合交集使用的命令为sinter:sinter key1 key2 key3</span><br><span class="line">sadd set_1 1, 2 python three C 三</span><br><span class="line">sadd set_2 9 8.0 七 VI python 2</span><br><span class="line">sinter set_1 set_2 # 2 python</span><br></pre></td></tr></table></figure></p>
+<p><strong>集合的并集</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 在redis中，求集合并集使用的命令是sunion: sunion key1 key2 key3</span><br><span class="line">sadd set_4 9 8.0 七 VII python 2</span><br><span class="line">sadd set_3 1, 2 python three C 三</span><br><span class="line">sunion set_3 set_4</span><br></pre></td></tr></table></figure></p>
+<p><strong>集合的差集</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 在redis中，求集合的差集使用的命令是sdiff: sdiff key1 key2 key3</span><br><span class="line">sadd set_6 9 8.0 七 VII python 2</span><br><span class="line">sadd set_5 1, 2 python three C 三</span><br><span class="line">sdiff set_5 set_6</span><br></pre></td></tr></table></figure></p>
+<h2 id="哈希表的功能和应用"><a href="#哈希表的功能和应用" class="headerlink" title="哈希表的功能和应用"></a>哈希表的功能和应用</h2><p><strong>向哈希表中添加内容</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hset people_info 赵老六 '&#123;"age":10,"salary":1000,"address":"北京"&#125;'</span><br><span class="line">hmset book_info 论语 32 中庸 48 大学 50</span><br></pre></td></tr></table></figure></p>
+<p><strong>向哈希表中读取数据</strong></p>
+<blockquote>
+<p>从哈希表中读取数据，分别对应的命令是: hkeys, hget, hmget, hgetall,它们的格式如下:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hkeys 哈希表名</span><br><span class="line">hget 哈希表名 字段名</span><br><span class="line">hmget 哈希表名 字段名1 字段名2 字段名3</span><br><span class="line">hgetall 哈希表名</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>判断字段是否存在和获取字段数量</strong></p>
+<blockquote>
+<p>判断字段是否存在使用命令hexists, 获取字段数量使用关键字heln,它们的格式如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexists 哈希表名 字段名</span><br><span class="line">hlen 哈希表名</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<ul>
+<li>执行hexists时，如果字段存在，则返回1；如果字段不存在，则返回0.</li>
+</ul>
+<h2 id="发布消息-订阅频道"><a href="#发布消息-订阅频道" class="headerlink" title="发布消息/订阅频道"></a>发布消息/订阅频道</h2><p><strong>发布消息</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">publish computer 人工智能新突破</span><br></pre></td></tr></table></figure></p>
+<p><strong>订阅频道</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> subscribe 频道名1 频道名2</span><br><span class="line">subscribe computer math</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>订阅之后，一旦被订阅的频道有新的消息发布，订阅端就会收到消息</li>
+<li>每条消息都会对应redis-cli中的3条返回消息: 第一条是信息类，第二条是频道名，第三条是被发布的内容</li>
+</ul>
+<h2 id="有序集合"><a href="#有序集合" class="headerlink" title="有序集合"></a>有序集合</h2><blockquote>
+<p>有序集合(<code>sorted set</code>)是Redis的一个数据结构。<br>有序集合里面的数据跟集合一样，也是不能重复的，但是每一个元素又关联了一个分数，根据这个分数可以对元素进行排序，分数可以重复。</p>
+</blockquote>
+<p><strong>添加数据</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zadd 有序集合名 评分1 值1 评分2 值2 评分n 值n</span><br></pre></td></tr></table></figure></p>
+<p><strong>修改评分</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zincrby 有序集合名 修改的分数 值</span><br></pre></td></tr></table></figure></p>
+<p><strong>基于评分范围排序，基于位置范围排序</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 基于评分范围排序</span><br><span class="line"><span class="meta">#</span> WITHSCORES可以省略，省略之后，只有值没有分</span><br><span class="line"><span class="meta">#</span> 如果不需要对结果进行切片，则LIMIT 切片开始位置 结果数量也可以省略</span><br><span class="line">zrangebyscore 有序列表 评分下限 评分上限 WITHSCORES LIMIT 切片开始位置 结果数量</span><br><span class="line">zrevrangebyscore 有序列表 评分下限 评分上限 WITHSCORES LIMIT 切片开始位置 结果数量</span><br></pre></td></tr></table></figure></p>
+<p><strong>查询值得排名，查询值得评分</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 查询值得排名</span><br><span class="line">zrank 有序集合名 值</span><br><span class="line">zrevrank 有序集合名 值</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 查询值得评分</span><br><span class="line">zscore 有序集合名 值</span><br></pre></td></tr></table></figure></p>
+<p><strong>其它常用命令</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 查询有序集合中元素得个数</span><br><span class="line">zcard 有序集合名</span><br><span class="line"><span class="meta">#</span> 查询评分范围内得元素个数</span><br><span class="line">zcount 有序集合名 积分下限 积分上限</span><br></pre></td></tr></table></figure></p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/Database/Redis/Python操作Redis/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    Python操作redis
+                
+            </div>
+        </a>
+    
+    
+        <a href="/Python/Python内置函数/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Python内置函数</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Saltci &copy; 2020 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>

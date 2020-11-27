@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    <title>lsof命令 | Saltci Wiki</title>
+    
+    
+        <meta name="keywords" content="linux">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="lsof命令lsof(list open files)是一个查看当前系统文件的工具.在Linux环境下,任何事物都以文件的形式存在,通过文件不仅仅可以访问常规数据,还可以访问网络连接和硬件.如传输控制协议(TCP)和用户数据报协议(UDP)套接字等,系统后台都为该应用程序分配了一个文件描述符,该文件描述符提供了大量关于这个应用程序本身的信息. lsof可以打开的文件可以是:  普通文件 目录 网络">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lsof命令">
+<meta property="og:url" content="http://saltci.xyz/Linux/lsof命令/index.html">
+<meta property="og:site_name" content="Saltci Wiki">
+<meta property="og:description" content="lsof命令lsof(list open files)是一个查看当前系统文件的工具.在Linux环境下,任何事物都以文件的形式存在,通过文件不仅仅可以访问常规数据,还可以访问网络连接和硬件.如传输控制协议(TCP)和用户数据报协议(UDP)套接字等,系统后台都为该应用程序分配了一个文件描述符,该文件描述符提供了大量关于这个应用程序本身的信息. lsof可以打开的文件可以是:  普通文件 目录 网络">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-11-27T07:02:13.806Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lsof命令">
+<meta name="twitter:description" content="lsof命令lsof(list open files)是一个查看当前系统文件的工具.在Linux环境下,任何事物都以文件的形式存在,通过文件不仅仅可以访问常规数据,还可以访问网络连接和硬件.如传输控制协议(TCP)和用户数据报协议(UDP)套接字等,系统后台都为该应用程序分配了一个文件描述符,该文件描述符提供了大量关于这个应用程序本身的信息. lsof可以打开的文件可以是:  普通文件 目录 网络">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Saltci Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-156011359-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?36d3b8fdaaf79741acc88f3416e00bf1";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Saltci Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Database
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MongoDB
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/MongoDB/MongDB常用命令/">MongoDB常用命令</a></li>  <li class="file"><a href="/Database/MongoDB/Python操作MongoDB/">Python操作MongoDB</a></li>  <li class="file"><a href="/Database/MongoDB/mongoengine/">mongoengine</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/Redis/Redis快速上手/">Redis快速上手</a></li>  <li class="file"><a href="/Database/Redis/Python操作Redis/">Python操作redis</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            DevOps
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Docker/Docker使用指南/">Docker使用指南</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kubernetes
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Kubernetes/Kubernetes基本概念/">Kubernetes基本概念与使用</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/DevOps/YAML/">YAML</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Git
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Git/git常用命令总结/">git常用命令总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Linux/crontab命令/">crontab命令</a></li>  <li class="file active"><a href="/Linux/lsof命令/">lsof命令</a></li>  <li class="file"><a href="/Linux/wget命令/">wget命令</a></li>  <li class="file"><a href="/Linux/shell脚本编程/">shell脚本编程</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            data_analysis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Python/data_analysis/numpy/">numpy</a></li>  <li class="file"><a href="/Python/data_analysis/jupyter_notebook/">jupyter_notebook常用指南</a></li>  <li class="file"><a href="/Python/data_analysis/pandas/">pandas</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/Python/time和datetime模块/">time和datetime模块</a></li>  <li class="file"><a href="/Python/Python内置函数/">Python内置函数</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/index/">Welcome Saltci's Wiki Site</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-Linux/lsof命令" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Linux/">Linux</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/linux/">linux</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/Linux/lsof命令/">
+            <time datetime="2020-01-21T02:48:52.000Z" itemprop="datePublished">2020-01-21</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/raw/hexo/source/_posts/Linux/lsof命令.md" rel="external nofollow noopener noreferrer" target="_blank"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/edit/hexo/source/_posts/Linux/lsof命令.md" rel="external nofollow noopener noreferrer" target="_blank"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/commits/hexo/source/_posts/Linux/lsof命令.md" rel="external nofollow noopener noreferrer" target="_blank"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            lsof命令
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">Catalogue</strong>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#lsof命令"><span class="toc-number">1.</span> <span class="toc-text">lsof命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#lsof命令参数"><span class="toc-number">1.1.</span> <span class="toc-text">lsof命令参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lsof使用实例"><span class="toc-number">1.2.</span> <span class="toc-text">lsof使用实例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-number">2.</span> <span class="toc-text">参考资料</span></a></li></ol>
+                </div>
+            
+        
+        
+            <h1 id="lsof命令"><a href="#lsof命令" class="headerlink" title="lsof命令"></a>lsof命令</h1><p><code>lsof</code>(list open files)是一个查看当前系统文件的工具.在Linux环境下,任何事物都以文件的形式存在,通过文件不仅仅可以访问常规数据,还可以访问网络连接和硬件.如传输控制协议(TCP)和用户数据报协议(UDP)套接字等,系统后台都为该应用程序分配了一个文件描述符,该文件描述符提供了大量关于这个应用程序本身的信息.</p>
+<p><code>lsof</code>可以打开的文件可以是:</p>
+<ol>
+<li>普通文件</li>
+<li>目录</li>
+<li>网络文件系统的文件</li>
+<li>字符和设备文件</li>
+<li>(函数)共享库</li>
+<li>管道,命名管道</li>
+<li>符号链接</li>
+<li>网络文件(如:NFS file,网络Socket,unix域名socket)</li>
+<li>等等</li>
+</ol>
+<h2 id="lsof命令参数"><a href="#lsof命令参数" class="headerlink" title="lsof命令参数"></a>lsof命令参数</h2><ul>
+<li>-a 列出打开文件存在的进程</li>
+<li>-c&lt;进程名&gt; 列出指定进程所打开的文件</li>
+<li>-g 列出GID号进程详情</li>
+<li>-d&lt;文件号&gt; 列出占用该文件号的进程</li>
+<li>+d&lt;目录&gt; 列出目录下被打开的文件</li>
+<li>+D&lt;目录&gt; 递归列出目录下被打开的文件</li>
+<li>-n&lt;目录&gt; 列出使用NFS的文件</li>
+<li>-i&lt;条件&gt; 列出符合条件的进程。（4、6、协议、:端口、 @ip ）</li>
+<li>-p&lt;进程号&gt; 列出指定进程号所打开的文件</li>
+<li>-u 列出UID号进程详情</li>
+<li>-h 显示帮助信息</li>
+<li>-v 显示版本信息</li>
+</ul>
+<h2 id="lsof使用实例"><a href="#lsof使用实例" class="headerlink" title="lsof使用实例"></a>lsof使用实例</h2><p><strong>实例1: 无任何参数</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>lsof | more</span><br><span class="line"></span><br><span class="line">COMMAND     PID   TID           USER   FD      TYPE             DEVICE  SIZE/OFF       NODE NAME</span><br><span class="line">systemd       1                 root  cwd       DIR              253,1      4096          2 /</span><br><span class="line">systemd       1                 root  rtd       DIR              253,1      4096          2 /</span><br></pre></td></tr></table></figure></p>
+<p>说明:</p>
+<p><code>lsof</code>输出各列信息的意义如下:</p>
+<ul>
+<li>COMMAND:进程的名称</li>
+<li>PID:进程标识符</li>
+<li>USER:进程所有者</li>
+<li><p>FD:文件描述符,应用程序通过文件描述符识别该文件,如<code>cwd</code>,<code>txt</code>等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">（1）cwd：表示current work dirctory，即：应用程序的当前工作目录，这是该应用程序启动的目录，除非它本身对这个目录进行更改</span><br><span class="line">（2）txt ：该类型的文件是程序代码，如应用程序二进制文件本身或共享库，如上列表中显示的 /sbin/init 程序</span><br><span class="line">（3）lnn：library references (AIX);</span><br><span class="line">（4）er：FD information error (see NAME column);</span><br><span class="line">（5）jld：jail directory (FreeBSD);</span><br><span class="line">（6）ltx：shared library text (code and data);</span><br><span class="line">（7）mxx ：hex memory-mapped type number xx.</span><br><span class="line">（8）m86：DOS Merge mapped file;</span><br><span class="line">（9）mem：memory-mapped file;</span><br><span class="line">（10）mmap：memory-mapped device;</span><br><span class="line">（11）pd：parent directory;</span><br><span class="line">（12）rtd：root directory;</span><br><span class="line">（13）tr：kernel trace file (OpenBSD);</span><br><span class="line">（14）v86  VP/ix mapped file;</span><br><span class="line">（15）0：表示标准输入</span><br><span class="line">（16）1：表示标准输出</span><br><span class="line">（17）2：表示标准错误</span><br><span class="line">一般在标准输出、标准错误、标准输入后还跟着文件状态模式：r、w、u等</span><br><span class="line">（1）u：表示该文件被打开并处于读取/写入模式</span><br><span class="line">（2）r：表示该文件被打开并处于只读模式</span><br><span class="line">（3）w：表示该文件被打开并处于</span><br><span class="line">（4）空格：表示该文件的状态模式为unknow，且没有锁定</span><br><span class="line">（5）-：表示该文件的状态模式为unknow，且被锁定</span><br><span class="line">同时在文件状态模式后面，还跟着相关的锁</span><br><span class="line">（1）N：for a Solaris NFS lock of unknown type;</span><br><span class="line">（2）r：for read lock on part of the file;</span><br><span class="line">（3）R：for a read lock on the entire file;</span><br><span class="line">（4）w：for a write lock on part of the file;（文件的部分写锁）</span><br><span class="line">（5）W：for a write lock on the entire file;（整个文件的写锁）</span><br><span class="line">（6）u：for a read and write lock of any length;</span><br><span class="line">（7）U：for a lock of unknown type;</span><br><span class="line">（8）x：for an SCO OpenServer Xenix lock on part      of the file;</span><br><span class="line">（9）X：for an SCO OpenServer Xenix lock on the      entire file;</span><br><span class="line">（10）space：if there is no lock.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TYPE:文件类型,如<code>DIR</code>,<code>REG</code>等,常见的文件类型:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">（1）DIR：表示目录</span><br><span class="line">（2）CHR：表示字符类型</span><br><span class="line">（3）BLK：块设备类型</span><br><span class="line">（4）UNIX： UNIX 域套接字</span><br><span class="line">（5）FIFO：先进先出 (FIFO) 队列</span><br><span class="line">（6）IPv4：网际协议 (IP) 套接字</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>DEVICE:指定磁盘的名称</p>
+</li>
+<li>SIZE:文件的大小</li>
+<li>NODE:索引节点(文件在磁盘上的标识)</li>
+<li>NAME:打开文件的确切名称</li>
+</ul>
+<p><strong>实例2: 查看某个文件相关的进程</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>lsof /bin/bash</span><br><span class="line"></span><br><span class="line">COMMAND     PID USER  FD   TYPE DEVICE SIZE/OFF    NODE NAME</span><br><span class="line">mysqld_sa  2169 root txt    REG  253,0   938736 4587562 /bin/bash</span><br><span class="line">ksmtuned   2334 root txt    REG  253,0   938736 4587562 /bin/bash</span><br><span class="line">bash      20121 root txt    REG  253,0   938736 4587562 /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p><strong>实例3: 列出某个用户打开的文件信息</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>lsof -u &lt;username&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>实例4: 列出某个程序进程所打开的文件信息</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>lsof -c mysql</span><br><span class="line"><span class="meta">$</span>lsof | grep mysql</span><br></pre></td></tr></table></figure></p>
+<p><strong>实例5:列出谁在使用某个端口</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span>lsof -i:3306</span><br></pre></td></tr></table></figure></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><blockquote>
+<ul>
+<li><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/lsof.html" rel="external nofollow noopener noreferrer" target="_blank">lsof 一切皆文件</a></li>
+</ul>
+</blockquote>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/Python/data_analysis/numpy/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    numpy
+                
+            </div>
+        </a>
+    
+    
+        <a href="/Python/time和datetime模块/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">time和datetime模块</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Saltci &copy; 2020 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    <title>Python操作MongoDB | Saltci Wiki</title>
+    
+    
+        <meta name="keywords" content="Python,mongodb">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="使用pymongo操作MongoDB数据库连接数据库安装pymongo1pip install pymongo 连接数据库12345678# 1.如果mongodb运行在本地，且没有修改端口或者添加用户名和密码，则初始化MongoClient实例不需要带参数from pymongo import MongoClientclient = MongoClient()# 2.如果mongodb运行在远程">
+<meta name="keywords" content="Python,mongodb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python操作MongoDB">
+<meta property="og:url" content="http://saltci.xyz/Database/MongoDB/Python操作MongoDB/index.html">
+<meta property="og:site_name" content="Saltci Wiki">
+<meta property="og:description" content="使用pymongo操作MongoDB数据库连接数据库安装pymongo1pip install pymongo 连接数据库12345678# 1.如果mongodb运行在本地，且没有修改端口或者添加用户名和密码，则初始化MongoClient实例不需要带参数from pymongo import MongoClientclient = MongoClient()# 2.如果mongodb运行在远程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-11-27T07:02:13.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python操作MongoDB">
+<meta name="twitter:description" content="使用pymongo操作MongoDB数据库连接数据库安装pymongo1pip install pymongo 连接数据库12345678# 1.如果mongodb运行在本地，且没有修改端口或者添加用户名和密码，则初始化MongoClient实例不需要带参数from pymongo import MongoClientclient = MongoClient()# 2.如果mongodb运行在远程">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Saltci Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-156011359-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?36d3b8fdaaf79741acc88f3416e00bf1";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Saltci Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Database
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            MongoDB
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/MongoDB/MongDB常用命令/">MongoDB常用命令</a></li>  <li class="file active"><a href="/Database/MongoDB/Python操作MongoDB/">Python操作MongoDB</a></li>  <li class="file"><a href="/Database/MongoDB/mongoengine/">mongoengine</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/Redis/Redis快速上手/">Redis快速上手</a></li>  <li class="file"><a href="/Database/Redis/Python操作Redis/">Python操作redis</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            DevOps
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Docker/Docker使用指南/">Docker使用指南</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kubernetes
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Kubernetes/Kubernetes基本概念/">Kubernetes基本概念与使用</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/DevOps/YAML/">YAML</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Git
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Git/git常用命令总结/">git常用命令总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Linux/crontab命令/">crontab命令</a></li>  <li class="file"><a href="/Linux/lsof命令/">lsof命令</a></li>  <li class="file"><a href="/Linux/wget命令/">wget命令</a></li>  <li class="file"><a href="/Linux/shell脚本编程/">shell脚本编程</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            data_analysis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Python/data_analysis/numpy/">numpy</a></li>  <li class="file"><a href="/Python/data_analysis/jupyter_notebook/">jupyter_notebook常用指南</a></li>  <li class="file"><a href="/Python/data_analysis/pandas/">pandas</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/Python/time和datetime模块/">time和datetime模块</a></li>  <li class="file"><a href="/Python/Python内置函数/">Python内置函数</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/index/">Welcome Saltci's Wiki Site</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-Database/MongoDB/Python操作MongoDB" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Database/">Database</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Database/MongoDB/">MongoDB</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Python-mongodb/">Python,mongodb</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/Database/MongoDB/Python操作MongoDB/">
+            <time datetime="2020-02-04T04:36:00.000Z" itemprop="datePublished">2020-02-04</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/raw/hexo/source/_posts/Database/MongoDB/Python操作MongoDB.md" rel="external nofollow noopener noreferrer" target="_blank"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/edit/hexo/source/_posts/Database/MongoDB/Python操作MongoDB.md" rel="external nofollow noopener noreferrer" target="_blank"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/commits/hexo/source/_posts/Database/MongoDB/Python操作MongoDB.md" rel="external nofollow noopener noreferrer" target="_blank"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Python操作MongoDB
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">Catalogue</strong>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用pymongo操作MongoDB数据库"><span class="toc-number">1.</span> <span class="toc-text">使用pymongo操作MongoDB数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#连接数据库"><span class="toc-number">1.1.</span> <span class="toc-text">连接数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pymongo基本操作"><span class="toc-number">1.2.</span> <span class="toc-text">pymongo基本操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MongoDB与Python不通用的操作"><span class="toc-number">2.</span> <span class="toc-text">MongoDB与Python不通用的操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MongoDB优化和安全建议"><span class="toc-number">3.</span> <span class="toc-text">MongoDB优化和安全建议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#常见问题"><span class="toc-number">3.1.</span> <span class="toc-text">常见问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提高MongoDB读写性能"><span class="toc-number">3.2.</span> <span class="toc-text">提高MongoDB读写性能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提高MongoDB的安全性"><span class="toc-number">3.3.</span> <span class="toc-text">提高MongoDB的安全性</span></a></li></ol></li></ol>
+                </div>
+            
+        
+        
+            <h1 id="使用pymongo操作MongoDB数据库"><a href="#使用pymongo操作MongoDB数据库" class="headerlink" title="使用pymongo操作MongoDB数据库"></a>使用pymongo操作MongoDB数据库</h1><h2 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h2><p><strong>安装pymongo</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pymongo</span><br></pre></td></tr></table></figure></p>
+<p><strong>连接数据库</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1.如果mongodb运行在本地，且没有修改端口或者添加用户名和密码，则初始化MongoClient实例不需要带参数</span></span><br><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line">client = MongoClient()</span><br><span class="line"><span class="comment"># 2.如果mongodb运行在远程服务器上，则需要使用URL来指定链接地址</span></span><br><span class="line"><span class="comment"># 格式：mongodb://&lt;username&gt;:&lt;password&gt;@&lt;ip地址或域名&gt;:&lt;端口&gt;/数据库名</span></span><br><span class="line">client = MongoClient(<span class="string">"mongodb://username:123456@45.76.110.210:27019"</span>)</span><br><span class="line"><span class="comment"># 3.如果没有设置权限认证则不需要用户名和密码</span></span><br><span class="line">client = MongoClient(<span class="string">"mongodb://45.76.110.210:27109"</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>连接库与集合</strong></p>
+<ul>
+<li><p>方法一：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line">client = MongoClient()</span><br><span class="line">database = client.test_db</span><br><span class="line">collection = database.test_collection</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法二:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line">client = MongoClient()</span><br><span class="line">db_name = <span class="string">"test_db"</span></span><br><span class="line">collection_name = <span class="string">"test_collection"</span></span><br><span class="line">database = client[db_name]</span><br><span class="line">clllection = database[collection_name]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="pymongo基本操作"><a href="#pymongo基本操作" class="headerlink" title="pymongo基本操作"></a>pymongo基本操作</h2><p><strong>mongo命令与pymongo方法对照表</strong></p>
+<table>
+<thead>
+<tr>
+<th>MongoDB命令</th>
+<th>PyMongo命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>insertOne</td>
+<td>insert_one</td>
+</tr>
+<tr>
+<td>insertMany</td>
+<td>insert_many</td>
+</tr>
+<tr>
+<td>find</td>
+<td>find</td>
+</tr>
+<tr>
+<td>updateOne</td>
+<td>update_one</td>
+</tr>
+<tr>
+<td>updateMany</td>
+<td>update_many</td>
+</tr>
+<tr>
+<td>deleteOne</td>
+<td>delete_one</td>
+</tr>
+<tr>
+<td>deleteMany</td>
+<td>delete_many</td>
+</tr>
+</tbody>
+</table>
+<p><strong>插入数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line">client = MongoClient()</span><br><span class="line">database = client[<span class="string">"test_db"</span>]</span><br><span class="line">collection = database[<span class="string">"test_collection"</span>]</span><br><span class="line"><span class="comment"># 批量插入数据</span></span><br><span class="line">collection.insert_many([</span><br><span class="line">    &#123;<span class="string">"name"</span>:<span class="string">"张三"</span>,<span class="string">"age"</span>:<span class="number">12</span>&#125;,</span><br><span class="line">    &#123;<span class="string">"name"</span>:<span class="string">"李四"</span>,<span class="string">"age"</span>:<span class="number">15</span>&#125;</span><br><span class="line">])</span><br><span class="line"><span class="comment"># 插入单条数据</span></span><br><span class="line">collection.insert_one(&#123;<span class="string">"name"</span>:<span class="string">"李四"</span>,<span class="string">"age"</span>:<span class="number">15</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>查询数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line">client = MongoClient()</span><br><span class="line">database = client[<span class="string">"test_db"</span>]</span><br><span class="line">collection = database[<span class="string">"test_collection"</span>]</span><br><span class="line"></span><br><span class="line">rows = collection.find(&#123;</span><br><span class="line">    <span class="string">"age"</span>:&#123;<span class="string">"$lt"</span>:<span class="number">25</span>,<span class="string">"$gt"</span>:<span class="number">21</span>&#125;,</span><br><span class="line">    <span class="string">"name"</span>:&#123;<span class="string">"$ne"</span>:<span class="string">"张三"</span>&#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">    print(row)</span><br></pre></td></tr></table></figure></p>
+<p><strong>更新数据</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from pymongo import MongoClient</span><br><span class="line">client = MongoClient()</span><br><span class="line">database = client["test_db"]</span><br><span class="line">collection = database["test_collection"]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 更新多条数据</span><br><span class="line">collection.update_many(</span><br><span class="line">    &#123;"name":"张三"&#125;,</span><br><span class="line">    &#123;"$set":&#123;"address":"美国","age":80&#125;&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>使用<code>$set</code>只更新字典内存在的字段，如果不用<code>$set</code>则会把之前的数据全部用字典替换掉，原本存在的其它字段会删除</li>
+<li>更新操作支持<code>upsert</code>参数，如果该参数存在则更新，不存在则创建</li>
+<li>如果使用了<code>upsert</code>参数，则<code>$set</code>的值应该包含每个字段，否则被插入的内容只有被更新的这几个字段</li>
+</ul>
+<p><strong>删除数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">collection.delete_many(&#123;<span class="string">"age"</span>:<span class="number">0</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>python实现mongoDB的regex查询</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接mongodb</span></span><br><span class="line">handler = pymongo.MongoClient().test_db.test_collection</span><br><span class="line"></span><br><span class="line">query_bds = &#123;<span class="string">"name"</span>:&#123;<span class="string">"$regex"</span>:<span class="string">"^R"</span>&#125;&#125;</span><br><span class="line">rows = handler.find(query_bds)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">    print(row)</span><br></pre></td></tr></table></figure></p>
+<p><strong>Python实现MongoDB的AND和OR操作</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接mongodb</span></span><br><span class="line">handler = pymongo.MongoClient().test_db.test_collection</span><br><span class="line"></span><br><span class="line">rows = handler.find(&#123;</span><br><span class="line">    <span class="string">"$and"</span>:[</span><br><span class="line">        &#123;<span class="string">"$or"</span>:[</span><br><span class="line">            &#123;<span class="string">"age"</span>:&#123;<span class="string">"$gt"</span>:<span class="number">28</span>&#125;&#125;,</span><br><span class="line">            &#123;<span class="string">"salary"</span>:&#123;<span class="string">"$gt"</span>:<span class="number">9900</span>&#125;&#125;</span><br><span class="line">        ]&#125;,</span><br><span class="line">        &#123;<span class="string">"$or"</span>:[</span><br><span class="line">            &#123;<span class="string">"sex"</span>:<span class="string">"男"</span>&#125;,</span><br><span class="line">            &#123;<span class="string">"id"</span>:&#123;<span class="string">"$lt"</span>:<span class="number">20</span>&#125;&#125;</span><br><span class="line">        ]&#125;</span><br><span class="line">]&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">    print(row)</span><br></pre></td></tr></table></figure></p>
+<p><strong>Python操作嵌入式文档和数组字段</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import pymongo</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 连接mongodb</span><br><span class="line">handler = pymongo.MongoClient().test_db.test_collection</span><br><span class="line"></span><br><span class="line">rows1 = handler.find(&#123;"size.0":"M"&#125;)</span><br><span class="line">rows2 = handler.find(&#123;"price":&#123;"$lt":300,"$gte":200&#125;&#125;)</span><br><span class="line">rows3 = handler.find(&#123;"price":&#123;"$size":2&#125;&#125;)</span><br><span class="line">rows4 = handler.find(&#123;"price.0":&#123;"$gt":500&#125;&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用python执行聚合操作</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import pymongo</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 连接mongodb</span><br><span class="line">handler = pymongo.MongoClient().test_db.test_collection</span><br><span class="line"></span><br><span class="line">pipe = [</span><br><span class="line">    &#123;"$match":&#123;"name":"张三"&#125;&#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        "$lookup":&#123;</span><br><span class="line">            "from":"weibo_post",</span><br><span class="line">            "localField":"id",</span><br><span class="line">            "foreignField":"user_id",</span><br><span class="line">            "as":"weibo_info"</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;"$unwind":"$weibo_info"&#125;,</span><br><span class="line">    &#123;"$project":&#123;</span><br><span class="line">        "name":1,</span><br><span class="line">        "work":1,</span><br><span class="line">        "content":"$weibo_info.content",</span><br><span class="line">        "post_time":"$weibo_info.post_time"</span><br><span class="line">&#125;&#125;]</span><br><span class="line">rows = handler.aggregate(pipe)</span><br><span class="line"></span><br><span class="line">for row in rows:</span><br><span class="line">    print(row)</span><br></pre></td></tr></table></figure></p>
+<h1 id="MongoDB与Python不通用的操作"><a href="#MongoDB与Python不通用的操作" class="headerlink" title="MongoDB与Python不通用的操作"></a>MongoDB与Python不通用的操作</h1><p><strong>空值</strong></p>
+<ul>
+<li><code>MongoDB</code>中空值写作<code>null</code>,<code>Python</code>中空值写作<code>None</code></li>
+</ul>
+<p><strong>布尔值</strong></p>
+<ul>
+<li><code>MongoDB</code>中真为<code>true</code>,假为<code>false</code>,首字母小写；</li>
+<li><code>Python</code>中真为<code>True</code>，假为<code>False</code>，首字母大写</li>
+</ul>
+<p><strong>排序参数</strong></p>
+<ul>
+<li><code>MongoDB</code>中<code>sort()</code>命令接收一个字典，key是排序的字段名，值为1或-1</li>
+<li><code>Python</code>中<code>sort()</code>方法接收两个参数，第一个参数为字段名，第二个参数为-1或者1</li>
+</ul>
+<p><strong>查询ID</strong></p>
+<ul>
+<li><p><code>MongoDB</code>中可以根据<code>_id</code>的值来查询文档,查询语句如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.getCollection('test').find(&#123;"_id":ObjectID("5e37e51fe222645d0e3272f3")&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Python</code>中需要从<code>bson</code>库中导入<code>ObjectID</code>,代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line"><span class="keyword">from</span> bson <span class="keyword">import</span> ObjectID</span><br><span class="line"></span><br><span class="line">client = MongoClient()</span><br><span class="line">database = client[<span class="string">"test_db"</span>]</span><br><span class="line">collection = database[<span class="string">"test_collection"</span>]</span><br><span class="line"></span><br><span class="line">rows = collection.find(&#123;<span class="string">"_id"</span>:ObjectID(<span class="string">"5e37e51fe222645d0e3272f3"</span>)&#125;,</span><br><span class="line">                        ,&#123;<span class="string">"_id"</span>:<span class="number">0</span>&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="MongoDB优化和安全建议"><a href="#MongoDB优化和安全建议" class="headerlink" title="MongoDB优化和安全建议"></a>MongoDB优化和安全建议</h1><h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><ul>
+<li>使用Pymongodb操作数据时，凡是涉及写的操作(比如<code>insert</code>,<code>update</code>)，需要进行异常处理。</li>
+</ul>
+<h2 id="提高MongoDB读写性能"><a href="#提高MongoDB读写性能" class="headerlink" title="提高MongoDB读写性能"></a>提高MongoDB读写性能</h2><p><strong>批量插入与逐条插入数据，比较性能差异</strong></p>
+<p>1.生成初始数据<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">first_word_in_name = <span class="string">'赵钱孙李周吴郑王冯陈褚卫蒋沈韩杨朱秦尤许何吕施张孔曹严华金魏陶姜戚谢邹喻柏水窦章云苏潘葛奚范彭郎'</span></span><br><span class="line">second_word_in_name = <span class="string">'天地玄黄宇宙洪荒日月盈昃辰宿列张寒来暑往秋收冬藏闰余成岁律吕调阳云腾致雨露结为霜金生丽水玉出昆冈剑号巨阙'</span></span><br><span class="line">third_word_in_name = <span class="string">'对酒当歌人生几何譬如朝露去日苦多慨当以慷忧思难忘何以解忧唯有杜康青青子衿悠悠我心但为君故沉吟至今'</span></span><br><span class="line"></span><br><span class="line">print(len(first_word_in_name),len(second_word_in_name),len(third_word_in_name))</span><br><span class="line"></span><br><span class="line">work_number = <span class="number">1</span></span><br><span class="line">people_list = []</span><br><span class="line"><span class="keyword">for</span> first <span class="keyword">in</span> first_word_in_name:</span><br><span class="line">    <span class="keyword">for</span> second <span class="keyword">in</span> second_word_in_name:</span><br><span class="line">        <span class="keyword">for</span> third <span class="keyword">in</span> third_word_in_name:</span><br><span class="line">            name = first + second + third</span><br><span class="line">            age = random.randint(<span class="number">0</span>, <span class="number">100</span>)</span><br><span class="line">            salary = random.randint(<span class="number">10000</span>, <span class="number">20000</span>)</span><br><span class="line">            phone_number = <span class="string">'1'</span></span><br><span class="line">            <span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">                phone_number += str(random.randint(<span class="number">0</span>, <span class="number">9</span>))</span><br><span class="line">            people_list.append(&#123;<span class="string">'work_number'</span>: work_number,</span><br><span class="line">                                <span class="string">'name'</span>: name,</span><br><span class="line">                                <span class="string">'age'</span>: str(age),</span><br><span class="line">                                <span class="string">'salary'</span>: str(salary),</span><br><span class="line">                                <span class="string">'phone'</span>: phone_number&#125;)</span><br><span class="line">            work_number += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'people_info.csv'</span>, <span class="string">'w'</span>, encoding=<span class="string">'utf-8-sig'</span>,newline=<span class="string">''</span>) <span class="keyword">as</span> f:</span><br><span class="line">    writer = csv.DictWriter(f, fieldnames=[<span class="string">'work_number'</span>, <span class="string">'name'</span>, <span class="string">'age'</span>, <span class="string">'salary'</span>, <span class="string">'phone'</span>])</span><br><span class="line">    writer.writeheader()</span><br><span class="line">    writer.writerows(people_list)</span><br></pre></td></tr></table></figure></p>
+<p>2.逐行插入数据的时间<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'people_info.csv'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    reader = csv.DictReader(f)</span><br><span class="line">    people_info_list = [x <span class="keyword">for</span> x <span class="keyword">in</span> reader]</span><br><span class="line"></span><br><span class="line">handler = pymongo.MongoClient().chapter_8.one_by_one</span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line"><span class="keyword">for</span> info <span class="keyword">in</span> people_info_list:</span><br><span class="line">    handler.insert_one(info)</span><br><span class="line">end_time = time.time()</span><br><span class="line"></span><br><span class="line">print(<span class="string">'逐条插入数据，耗时：'</span>, end_time - start_time)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>逐条插入数据，耗时： 28.835277795791626</li>
+</ul>
+<p>3.批量插入数据<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'people_info.csv'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    reader = csv.DictReader(f)</span><br><span class="line">    people_info_list = [x <span class="keyword">for</span> x <span class="keyword">in</span> reader]</span><br><span class="line"></span><br><span class="line">handler = pymongo.MongoClient().chapter_8.batch</span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line">handler.insert_many(people_info_list)</span><br><span class="line">end_time = time.time()</span><br><span class="line">print(<span class="string">'批量插入数据，耗时：'</span>, end_time - start_time)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>批量插入数据，耗时： 2.1189966201782227</li>
+</ul>
+<p>4.如何正确的批量插入数据</p>
+<blockquote>
+<p>仅仅是本地的MongoDB数据库，批量插入数据的性能远远超过逐条插入数据性能。如果使用的是远程数据库，那么网络IO导致的时间消耗估计更大。</p>
+</blockquote>
+<p>从Redis里面读数据，再插入到MongoDB中：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line">handler = pymongo.MongoClient().chatper_8.people_info</span><br><span class="line"></span><br><span class="line">people_info_list = []</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    people_info_json = client.lpop(<span class="string">'people_info'</span>)</span><br><span class="line">    <span class="keyword">if</span> people_info_json:</span><br><span class="line">        people_info = json.loads(people_info_json.decode())</span><br><span class="line">        people_info_list.append(people_info)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">handler.insert_many(people_info_list)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>如果<code>Redis</code>中的数据量非常大，全部转换成字典以后超过系统内存了，怎么办？</li>
+<li>如果<code>Redis</code>中的数据临时暂停添加，过一会再添加，会怎么样？</li>
+<li>假设<code>Redis</code>中有100 000 000条数据，读取到99 999 999条数据断电了，会怎么样？</li>
+</ul>
+<p>5.批量一次性插入数据</p>
+<blockquote>
+<p>如果已经明确知道<code>redis</code>中的数据就是全部数据，虽然多，但是不会继续增加新的数据，那么代码可以修改为如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line">handler = pymongo.MongoClient().chatper_8.people_info</span><br><span class="line"></span><br><span class="line">people_info_list = []</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    people_info_json = client.lpop(<span class="string">'people_info'</span>)</span><br><span class="line">    <span class="keyword">if</span> people_info_json:</span><br><span class="line">        people_info = json.loads(people_info_json.decode())</span><br><span class="line">        people_info_list.append(people_info)</span><br><span class="line">        <span class="comment"># 如果列表中的数据超过1000条就先插入数据库</span></span><br><span class="line">        <span class="keyword">if</span> len(people_info_list) &gt;= <span class="number">1000</span>:</span><br><span class="line">            handler.insert_many(people_info_list)</span><br><span class="line">            people_info_list = []</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最后一轮可能凑不够1000条数据，所以还需要看看是否需要再次插入</span></span><br><span class="line"><span class="keyword">if</span> people_info_list:</span><br><span class="line">    handler.insert_many(people_info_list)</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>6.批量插入持续性数据</p>
+<blockquote>
+<p>如果<code>Redis</code>中的数据是持续性数据，则会有新的数据源源不断被加入到<code>Redis</code>中，每次添加的时间间隔不定，代码可以修改为如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line">handler = pymongo.MongoClient().chatper_8.people_info</span><br><span class="line"></span><br><span class="line">people_info_list = []</span><br><span class="line"><span class="comment"># 计数变量，只要请求Redis的次数为1000的倍数，那就批量插入数据库，这样保证people_info_list的数据最多等待100秒就会被插入数据库</span></span><br><span class="line">get_count = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    people_info_json = client.lpop(<span class="string">'people_info'</span>)</span><br><span class="line">    <span class="keyword">if</span> people_info_json:</span><br><span class="line">        people_info = json.loads(people_info_json.decode())</span><br><span class="line">        people_info_list.append(people_info)</span><br><span class="line">        <span class="keyword">if</span> len(people_info_list) &gt;= <span class="number">1000</span>:</span><br><span class="line">            handler.insert_many(people_info_list)</span><br><span class="line">            people_info_list = []</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> people_info_list <span class="keyword">and</span> get_count % <span class="number">1000</span> == <span class="number">0</span>:</span><br><span class="line">            handler.insert_many(people_info_list)</span><br><span class="line">            people_info_list = []</span><br><span class="line">        time.sleep(<span class="number">0.1</span>) <span class="comment"># 在本次发现redis为空的情况下，暂停0.1秒，这样做可以显著降低CPU的占用</span></span><br><span class="line">    get_count += <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>插入与更新数据，比较性能差异</strong></p>
+<blockquote>
+<p>更新操作（特别是逐条更新）比较浪费时间，因为它实际上包含了“查询”和“修改”两个步骤。与“插入”不一样，某些情况下数据的“更新”没办法实现批量操作，必须逐条更新。</p>
+</blockquote>
+<p>1.逐条更新数据<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line">handler = pymongo.MongoClient().chapter_8.one_by_one</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> handler.find(&#123;&#125;, &#123;<span class="string">'salary'</span>: <span class="number">1</span>&#125;):</span><br><span class="line">    salary = int(row[<span class="string">'salary'</span>])</span><br><span class="line">    new_salary = salary + <span class="number">100</span></span><br><span class="line">    handler.update_one(&#123;<span class="string">'_id'</span>: row[<span class="string">'_id'</span>]&#125;, &#123;<span class="string">'$set'</span>: &#123;<span class="string">'salary'</span>: str(new_salary)&#125;&#125;)</span><br><span class="line">end_time = time.time()</span><br><span class="line">print(<span class="string">'逐条更新数据，耗时：'</span>, end_time - start_time)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>逐条更新数据，耗时： 35.01171922683716</li>
+</ul>
+<p>2.用插入数据代替更新数据</p>
+<blockquote>
+<p>对于必须逐条更新大量数据的情况，也可以使用插入代替更新来提高性能。<br>基本逻辑是：把数据插入到另外一个集合，然后删除原来的集合，再把新集合名改名为原来的集合<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line">db = pymongo.MongoClient().chapter_8</span><br><span class="line">batch = db.batch</span><br><span class="line">new_collection = db.update_by_insert</span><br><span class="line">new_people_info_list = []</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> batch.find():</span><br><span class="line">    salary = int(row[<span class="string">'salary'</span>])</span><br><span class="line">    new_salary = salary + <span class="number">100</span></span><br><span class="line">    row[<span class="string">'salary'</span>] = str(new_salary)</span><br><span class="line">    new_people_info_list.append(row)</span><br><span class="line">new_collection.insert_many(new_people_info_list)</span><br><span class="line">end_time = time.time()</span><br><span class="line">print(<span class="string">'使用插入代替更新，耗时：'</span>, end_time - start_time)</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<ul>
+<li>使用插入代替更新，耗时： 2.155980110168457</li>
+</ul>
+<p><strong>使用索引提高查询速度</strong></p>
+<blockquote>
+<p>索引是一种特殊的数据结构，它使用了能够快速遍历的形式记录了集合中数据的位置。如果不使用索引，则每一次查询数据都会遍历整个集合；如果使用了索引，则数据库会直接根据索引快速找到需要的内容</p>
+</blockquote>
+<p>创建索引<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line">handler = pymongo.MongoClient().chapter8.one_by_one</span><br><span class="line"><span class="comment"># 创建索引，background为False，在创建索引时，这个集合就不能被查询和写入，但是速度快</span></span><br><span class="line"><span class="comment"># background为True，在创建索引时速度会慢一些，但是不影响其他程序读写这个集合</span></span><br><span class="line">handler.create_index(<span class="string">"salary"</span>,background=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>索引是以空间换时间。集合中的数据越多，索引占用的硬盘空间就越多。所以对必要的字段添加索引，不要对所有字段都添加索引</li>
+<li><code>_id</code>默认自带索引，不需要添加</li>
+</ul>
+<p><strong>引入redis,以降低mongodb读取频率</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">()</span>:</span></span><br><span class="line">    all_title = mongo_handler.disinct(<span class="string">'title'</span>)</span><br><span class="line">    redis_client.sadd(<span class="string">'news_title'</span>,*all_title)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">need_insert_news</span><span class="params">(news_title)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> redis_client.sadd(<span class="string">'news_title'</span>,news_title) == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p><strong>增添适当冗余信息，以提高查询速度</strong><br>在插入数据库时，添加一个特殊字段<code>special</code>，满足条件就是<code>True</code>,不满足条件就是<code>False</code>.通过<code>special</code>这个字段来提高查找效率.</p>
+<h2 id="提高MongoDB的安全性"><a href="#提高MongoDB的安全性" class="headerlink" title="提高MongoDB的安全性"></a>提高MongoDB的安全性</h2><p><strong>配置权限管理机制</strong></p>
+<blockquote>
+<p>为了增强<code>MongoDB</code>的安全性，需要配置基于角色的访问控制机制（Role-Based Access Control）</p>
+</blockquote>
+<p>1.创建管理员用户</p>
+<blockquote>
+<p>管理员的作用是创建其他用户。管理员用户本身不能对数据库进行控制。</p>
+</blockquote>
+<ul>
+<li><p>创建管理员账户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br><span class="line">db.createUser(&#123;</span><br><span class="line">    user:"admin",</span><br><span class="line">    pwd:"123456789",</span><br><span class="line">    roles:[&#123;role:"userAdminAnyDatabase",db:"admin"&#125;]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改配置文件,启用权限管理功能</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">security:</span><br><span class="line">  authorization: enabled</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启<code>MongoDB</code>数据库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 执行mongo命令，发现虽然能够连上数据库，但是已经不能执行常规操作了</span><br><span class="line"><span class="meta">#</span> 使用以下命令登录mongo</span><br><span class="line">mongo -u 'admin' -p '123456' --authenticationDatabase 'admin'</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2.创建普通用户</p>
+<blockquote>
+<p>管理员账户没有权限操作普通数据库。要操作普通数据库，还需要创建普通用户。</p>
+</blockquote>
+<p>创建一个对<code>chaprter_8</code>数据库有读写权限，对<code>chapter_4</code>只有读权限的普通用户。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">use chapter_8</span><br><span class="line"></span><br><span class="line">db.createUser(</span><br><span class="line">&#123;</span><br><span class="line">    user:"kingname",</span><br><span class="line">    pwd:"123456",</span><br><span class="line">    roles:[&#123;role:'readWrite',db:'chapter_8'&#125;,</span><br><span class="line">            &#123;role:'read',db:'chapter_4'&#125;]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>3.创建能操作数据库的超级管理员</p>
+<blockquote>
+<p>管理员账户能创建其他用户，看似权限很大，但不能访问任何一个数据库。所以如果有必要，还需要创建一个能对所有数据库都有全部权限的用户。</p>
+</blockquote>
+<p>创建能操作数据库的管理员<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br><span class="line"></span><br><span class="line">db.createUser(</span><br><span class="line">&#123;</span><br><span class="line">    user:"root",</span><br><span class="line">    pwd:"123456",</span><br><span class="line">    roles:['root']</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>开放外网访问</strong></p>
+<p>修改<code>mongodb</code>配置文件之后重启数据库<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 编辑文件/etc/mongodb.conf</span><br><span class="line">bind_ip:0.0.0.0</span><br></pre></td></tr></table></figure></p>
+<p><strong>连接数据库</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mongo --host localhost:27017 -u root -p --authenticationDatabase admin</span><br><span class="line">mongo 127.0.0.1:27017/admin  -u root  -p  password</span><br></pre></td></tr></table></figure></p>
+<p><strong>数据库导出和恢复</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 恢复数据库</span><br><span class="line">mongorestore --host localhost:27017 --username test --password ************ --gzip --archive=xxx.gz --db xxx</span><br></pre></td></tr></table></figure></p>
+<p>参数说明</p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/Database/MongoDB/MongDB常用命令/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    MongoDB常用命令
+                
+            </div>
+        </a>
+    
+    
+        <a href="/Linux/shell脚本编程/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">shell脚本编程</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Saltci &copy; 2020 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>

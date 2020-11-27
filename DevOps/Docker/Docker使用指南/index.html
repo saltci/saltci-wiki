@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    <title>Docker使用指南 | Saltci Wiki</title>
+    
+    
+        <meta name="keywords" content="Docker">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Docker容器使用 启动容器  12345docker run --name kubia-container -p 8080:8080 -d kubia# -d:后台运行docker run -it ubuntu /bin/bash# -i：交互式操作  -t:分配一个伪终端  /bin/bash:放在镜像名后的时命令# 使用exit退出终端  查看容器  123docker ps # 列出运行">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker使用指南">
+<meta property="og:url" content="http://saltci.xyz/DevOps/Docker/Docker使用指南/index.html">
+<meta property="og:site_name" content="Saltci Wiki">
+<meta property="og:description" content="Docker容器使用 启动容器  12345docker run --name kubia-container -p 8080:8080 -d kubia# -d:后台运行docker run -it ubuntu /bin/bash# -i：交互式操作  -t:分配一个伪终端  /bin/bash:放在镜像名后的时命令# 使用exit退出终端  查看容器  123docker ps # 列出运行">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://saltci.xyz/DevOps/Docker/Docker使用指南/dockerfile_build_images.png">
+<meta property="og:updated_time" content="2020-11-27T07:02:13.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker使用指南">
+<meta name="twitter:description" content="Docker容器使用 启动容器  12345docker run --name kubia-container -p 8080:8080 -d kubia# -d:后台运行docker run -it ubuntu /bin/bash# -i：交互式操作  -t:分配一个伪终端  /bin/bash:放在镜像名后的时命令# 使用exit退出终端  查看容器  123docker ps # 列出运行">
+<meta name="twitter:image" content="http://saltci.xyz/DevOps/Docker/Docker使用指南/dockerfile_build_images.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Saltci Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-156011359-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?36d3b8fdaaf79741acc88f3416e00bf1";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Saltci Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Database
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MongoDB
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/MongoDB/MongDB常用命令/">MongoDB常用命令</a></li>  <li class="file"><a href="/Database/MongoDB/Python操作MongoDB/">Python操作MongoDB</a></li>  <li class="file"><a href="/Database/MongoDB/mongoengine/">mongoengine</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/Redis/Redis快速上手/">Redis快速上手</a></li>  <li class="file"><a href="/Database/Redis/Python操作Redis/">Python操作redis</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            DevOps
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file active"><a href="/DevOps/Docker/Docker使用指南/">Docker使用指南</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kubernetes
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Kubernetes/Kubernetes基本概念/">Kubernetes基本概念与使用</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/DevOps/YAML/">YAML</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Git
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Git/git常用命令总结/">git常用命令总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Linux/crontab命令/">crontab命令</a></li>  <li class="file"><a href="/Linux/lsof命令/">lsof命令</a></li>  <li class="file"><a href="/Linux/wget命令/">wget命令</a></li>  <li class="file"><a href="/Linux/shell脚本编程/">shell脚本编程</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            data_analysis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Python/data_analysis/numpy/">numpy</a></li>  <li class="file"><a href="/Python/data_analysis/jupyter_notebook/">jupyter_notebook常用指南</a></li>  <li class="file"><a href="/Python/data_analysis/pandas/">pandas</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/Python/time和datetime模块/">time和datetime模块</a></li>  <li class="file"><a href="/Python/Python内置函数/">Python内置函数</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/index/">Welcome Saltci's Wiki Site</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-DevOps/Docker/Docker使用指南" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/DevOps/">DevOps</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/DevOps/Docker/">Docker</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Docker/">Docker</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/DevOps/Docker/Docker使用指南/">
+            <time datetime="2020-01-13T13:36:03.000Z" itemprop="datePublished">2020-01-13</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/raw/hexo/source/_posts/DevOps/Docker/Docker使用指南.md" rel="external nofollow noopener noreferrer" target="_blank"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/edit/hexo/source/_posts/DevOps/Docker/Docker使用指南.md" rel="external nofollow noopener noreferrer" target="_blank"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/commits/hexo/source/_posts/DevOps/Docker/Docker使用指南.md" rel="external nofollow noopener noreferrer" target="_blank"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Docker使用指南
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">Catalogue</strong>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker容器使用"><span class="toc-number">1.</span> <span class="toc-text">Docker容器使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker镜像使用"><span class="toc-number">2.</span> <span class="toc-text">Docker镜像使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker仓库管理"><span class="toc-number">3.</span> <span class="toc-text">Docker仓库管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dockerfile常用指令"><span class="toc-number">4.</span> <span class="toc-text">Dockerfile常用指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dockerfile示例"><span class="toc-number">5.</span> <span class="toc-text">Dockerfile示例</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其它"><span class="toc-number">6.</span> <span class="toc-text">其它</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux无需sudo执行docker命令"><span class="toc-number">6.1.</span> <span class="toc-text">Linux无需sudo执行docker命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
+                </div>
+            
+        
+        
+            <h1 id="Docker容器使用"><a href="#Docker容器使用" class="headerlink" title="Docker容器使用"></a>Docker容器使用</h1><ul>
+<li>启动容器</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run --name kubia-container -p 8080:8080 -d kubia</span><br><span class="line"><span class="meta">#</span> -d:后台运行</span><br><span class="line">docker run -it ubuntu /bin/bash</span><br><span class="line"><span class="meta">#</span> -i：交互式操作  -t:分配一个伪终端  /bin/bash:放在镜像名后的时命令</span><br><span class="line"><span class="meta">#</span> 使用exit退出终端</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看容器</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker ps # 列出运行中的容器</span><br><span class="line">docker ps -a # 列出所有的容器</span><br><span class="line">docker inspect &lt;docker_name or docker_id&gt; # 获取更多的容器信息</span><br></pre></td></tr></table></figure>
+<ul>
+<li>进入容器</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it kubia-container bash</span><br><span class="line"><span class="meta">#</span> windows下使用该命令可能会遇到:the input device is not a tty,使用winpty解决问题</span><br><span class="line"><span class="meta">#</span> https://stackoverflow.com/questions/43099116/error-the-input-device-is-not-a-tty </span><br><span class="line">winpty docker exec -it some_cassandra bash</span><br></pre></td></tr></table></figure>
+<ul>
+<li>停止和删除容器</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker stop kubia-container</span><br><span class="line">docker rm kubia-container</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看容器日志</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs -f &lt;容器名 or 容器id&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="Docker镜像使用"><a href="#Docker镜像使用" class="headerlink" title="Docker镜像使用"></a>Docker镜像使用</h1><ul>
+<li>获取镜像</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull python:3.6</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看镜像列表</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br><span class="line"><span class="meta">#</span> REPOSITORY: 表示镜像仓库源</span><br><span class="line"><span class="meta">#</span> TAG: 镜像标签</span><br><span class="line"><span class="meta">#</span> IMAGE ID:镜像ID</span><br><span class="line"><span class="meta">#</span> CREATE: 镜像创建时间</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查找镜像</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search httpd</span><br></pre></td></tr></table></figure>
+<ul>
+<li>删除镜像</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi &lt;镜像id or 镜像名&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>构建镜像</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t runoob/centos:6.7 .</span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置镜像标签</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag &lt;镜像id&gt; runoob/centos:dev</span><br></pre></td></tr></table></figure>
+<h1 id="Docker仓库管理"><a href="#Docker仓库管理" class="headerlink" title="Docker仓库管理"></a>Docker仓库管理</h1><ul>
+<li>登录和退出</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br><span class="line">docker logout</span><br></pre></td></tr></table></figure>
+<ul>
+<li>拉取镜像</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull python:3.6</span><br></pre></td></tr></table></figure>
+<ul>
+<li>推送镜像</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker tag kubia username/kubia # 使用附加标签标注镜像</span><br><span class="line">docker push username/kubia # 推送镜像</span><br></pre></td></tr></table></figure>
+<ul>
+<li>搜索镜像</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search username/kubia</span><br></pre></td></tr></table></figure>
+<h1 id="Dockerfile常用指令"><a href="#Dockerfile常用指令" class="headerlink" title="Dockerfile常用指令"></a>Dockerfile常用指令</h1><ul>
+<li><strong>FROM</strong>：基础镜像，后续操作都是基于这个基础镜像</li>
+<li><strong>MAINTAINER</strong>：用来指定维护者信息</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MAINTAINER xxx xxxx@example.com</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>RUN</strong>： 用于执行后面跟着的命令行命令,在<code>docker build</code>时运行</li>
+<li><strong>COPY</strong>：复制指令，从上下文目录中复制文件或者目录到容器的制定路径</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">COPY [--chown=&lt;user&gt;:&lt;group&gt;] &lt;源路径1&gt;... &lt;目标路径&gt;</span><br><span class="line"><span class="meta">#</span> [--chown=&lt;user&gt;:&lt;group&gt;]：可选参数，用户改变复制到容器内文件的拥有者和属组</span><br><span class="line"><span class="meta">#</span> &lt;源路径&gt;:源文件或目录，这里可以是通配符表达式，起通配符规则要满足Go的filepath.Match规则，如:</span><br><span class="line">COPY hom* /mydir/</span><br><span class="line">COPY home?.txt /mydir/</span><br><span class="line"><span class="meta">#</span> &lt;目标路径&gt;:容器内制定路径，不存在则自动创建</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>ADD</strong>：和<code>COPY</code>的使用格式一致，功能类似，不同之处在于：<ul>
+<li>ADD的优点：在执行<code>&lt;源文件&gt;</code>为<code>tar</code>压缩文件的话，压缩格式为<code>gzip</code>,<code>bzip2</code>以及<code>xz</code>的情况下，会自动复制并加压到<code>&lt;目标路径&gt;</code></li>
+<li>ADD的缺点：在不解压的前提下，无法复制<code>tar</code>压缩文件。会令镜像构建缓存失效，从而可能会令镜像构建变得缓慢。具体是否使用，可以根据是否需要自动解压来决定。</li>
+</ul>
+</li>
+<li><strong>CMD</strong>：类似于<code>RUN</code>命令，在<code>docker run</code>时运行<ul>
+<li>作用：为启动的容器制定要运行的程序，程序运行结束，容器也就结束。</li>
+<li>注:如果<code>Dockerfile</code>中存在多个<code>CMD</code>指令，仅最后一个有效</li>
+<li>会被<code>docker run</code>命令行参数中指定要运行的程序覆盖</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CMD command param1 param2 # 在/bin/bash 中执行，提供给需要交互的应用</span><br><span class="line">CMD ["&lt;可执行文件或命令&gt;","&lt;param1&gt;","&lt;param2&gt;"] # 使用exec执行，推荐方式</span><br><span class="line">CMD ["&lt;param1&gt;","&lt;param2&gt;",...] # 为 ENTRYPOINT指令指定的程序提供默认参数</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>ENTRYPOINT</strong>：类似于<code>CMD</code>指令，不会被<code>docker run</code>的命令行参数指定的指令覆盖，这些命令行参数会被当做参数传递给<code>ENTRYPOINT</code>指令指定的程序。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ENTRYPOINT ["nginx", "-c"] # 定参数</span><br><span class="line">CMD ["/etc/nginx/nginx.conf"] # 变参</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>ENV</strong>：定义环境变量，在后续的指令中，可以使用这个环境变量</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ENV &lt;key&gt; &lt;value&gt;</span><br><span class="line">ENV &lt;Key1&gt;=&lt;value1&gt; &lt;key2&gt;=&lt;value2&gt;...</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>VOLUME</strong>：定义匿名数据卷。建议在启动容器<code>docker run</code>时，通过<code>-v</code>参数修改挂载点</li>
+<li><strong>EXPOSE</strong>：声明端口</li>
+<li><strong>WORKDIR</strong>：指定工作目录，会在构建镜像中的每一层都存在，<code>WORKDIR</code>指定的工作目录，必须是提前建好的。</li>
+</ul>
+<h1 id="Dockerfile示例"><a href="#Dockerfile示例" class="headerlink" title="Dockerfile示例"></a>Dockerfile示例</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FROM python:3.6</span><br><span class="line"></span><br><span class="line">RUN mkdir -p /app &amp;&amp; mkdir -p /var/log/gunicorn</span><br><span class="line"></span><br><span class="line">WORKDIR /app</span><br><span class="line">COPY requirements.txt /app/requirements.txt</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line">COPY . /app</span><br><span class="line">EXPOSE 80 8000</span><br><span class="line">CMD ["gunicorn","-w","1","-k","gthread","-b","0.0.0.0:8000","manage:app"]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>构建镜像</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t flask_project:test .</span><br></pre></td></tr></table></figure>
+<p><img src="dockerfile_build_images.png" alt="基于Dockerfile构建一个新的容器镜像"></p>
+<h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><h2 id="Linux无需sudo执行docker命令"><a href="#Linux无需sudo执行docker命令" class="headerlink" title="Linux无需sudo执行docker命令"></a>Linux无需sudo执行docker命令</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.创建一个docker用户组</span><br><span class="line">sudo groupadd docker</span><br><span class="line">2.添加当前用户到docker用户组</span><br><span class="line">sudo usermod -aG docker $USER</span><br></pre></td></tr></table></figure>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><blockquote>
+<ul>
+<li><a href="https://www.tianmaying.com/tutorial/dockerfile" rel="external nofollow noopener noreferrer" target="_blank">Dockerfile详解以及Flask项目Dockerfile示例</a></li>
+<li><a href></a></li>
+</ul>
+</blockquote>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/DevOps/Kubernetes/Kubernetes基本概念/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    Kubernetes基本概念与使用
+                
+            </div>
+        </a>
+    
+    
+        <a href="/Git/git常用命令总结/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">git常用命令总结</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Saltci &copy; 2020 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>

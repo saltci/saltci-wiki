@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    <title>Python操作redis | Saltci Wiki</title>
+    
+    
+        <meta name="keywords" content="redis">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="安装和使用安装redis1pip install redis redis连接12345678import redis# 加上decode_response=True，写入的键值对中的value为str类型，不加入这个参数则为字节类型client = redis.Redis(host=&apos;localhost&apos;,port=6379,decode_responses=True)client.set(&apos;na">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python操作redis">
+<meta property="og:url" content="http://saltci.xyz/Database/Redis/Python操作Redis/index.html">
+<meta property="og:site_name" content="Saltci Wiki">
+<meta property="og:description" content="安装和使用安装redis1pip install redis redis连接12345678import redis# 加上decode_response=True，写入的键值对中的value为str类型，不加入这个参数则为字节类型client = redis.Redis(host=&apos;localhost&apos;,port=6379,decode_responses=True)client.set(&apos;na">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-11-27T07:02:13.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python操作redis">
+<meta name="twitter:description" content="安装和使用安装redis1pip install redis redis连接12345678import redis# 加上decode_response=True，写入的键值对中的value为str类型，不加入这个参数则为字节类型client = redis.Redis(host=&apos;localhost&apos;,port=6379,decode_responses=True)client.set(&apos;na">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Saltci Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-156011359-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?36d3b8fdaaf79741acc88f3416e00bf1";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Saltci Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Database
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MongoDB
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/MongoDB/MongDB常用命令/">MongoDB常用命令</a></li>  <li class="file"><a href="/Database/MongoDB/Python操作MongoDB/">Python操作MongoDB</a></li>  <li class="file"><a href="/Database/MongoDB/mongoengine/">mongoengine</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Database/Redis/Redis快速上手/">Redis快速上手</a></li>  <li class="file active"><a href="/Database/Redis/Python操作Redis/">Python操作redis</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            DevOps
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Docker/Docker使用指南/">Docker使用指南</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kubernetes
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/DevOps/Kubernetes/Kubernetes基本概念/">Kubernetes基本概念与使用</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/DevOps/YAML/">YAML</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Git
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Git/git常用命令总结/">git常用命令总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Linux/crontab命令/">crontab命令</a></li>  <li class="file"><a href="/Linux/lsof命令/">lsof命令</a></li>  <li class="file"><a href="/Linux/wget命令/">wget命令</a></li>  <li class="file"><a href="/Linux/shell脚本编程/">shell脚本编程</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            data_analysis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/Python/data_analysis/numpy/">numpy</a></li>  <li class="file"><a href="/Python/data_analysis/jupyter_notebook/">jupyter_notebook常用指南</a></li>  <li class="file"><a href="/Python/data_analysis/pandas/">pandas</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/Python/time和datetime模块/">time和datetime模块</a></li>  <li class="file"><a href="/Python/Python内置函数/">Python内置函数</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/index/">Welcome Saltci's Wiki Site</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-Database/Redis/Python操作Redis" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Database/">Database</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/Database/Redis/">Redis</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/redis/">redis</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/Database/Redis/Python操作Redis/">
+            <time datetime="2020-02-07T10:36:00.000Z" itemprop="datePublished">2020-02-07</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/raw/hexo/source/_posts/Database/Redis/Python操作Redis.md" rel="external nofollow noopener noreferrer" target="_blank"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/edit/hexo/source/_posts/Database/Redis/Python操作Redis.md" rel="external nofollow noopener noreferrer" target="_blank"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/saltci/wiki/commits/hexo/source/_posts/Database/Redis/Python操作Redis.md" rel="external nofollow noopener noreferrer" target="_blank"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Python操作redis
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">Catalogue</strong>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装和使用"><span class="toc-number">1.</span> <span class="toc-text">安装和使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串的创建，查询和修改"><span class="toc-number">2.</span> <span class="toc-text">字符串的创建，查询和修改</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#列表的创建，查询和修改"><span class="toc-number">3.</span> <span class="toc-text">列表的创建，查询和修改</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#列表的应用"><span class="toc-number">3.1.</span> <span class="toc-text">列表的应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#集合的创建，查找和修改"><span class="toc-number">4.</span> <span class="toc-text">集合的创建，查找和修改</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#哈希表的功能和应用"><span class="toc-number">5.</span> <span class="toc-text">哈希表的功能和应用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#发布消息-订阅频道"><span class="toc-number">6.</span> <span class="toc-text">发布消息/订阅频道</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#有序集合"><span class="toc-number">7.</span> <span class="toc-text">有序集合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-number">8.</span> <span class="toc-text">参考资料</span></a></li></ol>
+                </div>
+            
+        
+        
+            <h1 id="安装和使用"><a href="#安装和使用" class="headerlink" title="安装和使用"></a>安装和使用</h1><p><strong>安装redis</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install redis</span><br></pre></td></tr></table></figure></p>
+<p><strong>redis连接</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加上decode_response=True，写入的键值对中的value为str类型，不加入这个参数则为字节类型</span></span><br><span class="line">client = redis.Redis(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client.set(<span class="string">'name'</span>,<span class="string">'eiheihei'</span>)</span><br><span class="line"><span class="comment"># 取出键name对应的值</span></span><br><span class="line">print(client.get(<span class="string">'name'</span>))</span><br><span class="line">print(type(client.get(<span class="string">'name'</span>)))</span><br></pre></td></tr></table></figure></p>
+<p><strong>连接池</strong><br><code>redis</code>使用<code>ConnectionPool</code>来管理对一个<code>redis server</code>的所有连接，避免每次建立，释放连接的开销。默认每个Redis实例都会维护一个自己的连接池。<br>可以直接建立一个连接池，然后作为<code>Redis</code>的参数，就可以实现多个<code>Redis</code>实例共享一个连接池。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line">client.set(<span class="string">"gender"</span>,<span class="string">"male"</span>)</span><br><span class="line">print(client.get(<span class="string">'gender'</span>))</span><br></pre></td></tr></table></figure></p>
+<h1 id="字符串的创建，查询和修改"><a href="#字符串的创建，查询和修改" class="headerlink" title="字符串的创建，查询和修改"></a>字符串的创建，查询和修改</h1><p><strong>set(name,value,ex=None,nx=False,xx=False)</strong></p>
+<ul>
+<li><code>ex</code>: 过期时间(秒)</li>
+<li><code>px</code>: 过期时间(毫秒)</li>
+<li><code>nx</code>: 如果设置为<code>True</code>，则只有name不存在的时，当前<code>set</code>操作才执行(新建)</li>
+<li><code>xx</code>: 如果设置为<code>True</code>, 则只有name存在时，当前<code>set</code>操作才执行(修改)</li>
+</ul>
+<p>1.<code>ex</code>，过期时间(秒)，这里过期时间是3秒，3秒后键food的值就变成<code>None</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line">client.set(<span class="string">'food'</span>,<span class="string">'mutton'</span>,ex=<span class="number">3</span>) <span class="comment"># key是food，value是mutton,将键值对存入redis缓存</span></span><br><span class="line">print(client.get(<span class="string">'food'</span>))</span><br></pre></td></tr></table></figure></p>
+<p>2.<code>px</code>，过期时间(毫秒)，这里过期时间是3毫秒，3毫秒后键food的值就变成<code>None</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line">client.set(<span class="string">'food'</span>,<span class="string">'mutton'</span>,px=<span class="number">3</span>) <span class="comment"># key是food，value是mutton,将键值对存入redis缓存</span></span><br><span class="line">print(client.get(<span class="string">'food'</span>))</span><br></pre></td></tr></table></figure></p>
+<p>3.<code>nx</code>,如果设置为<code>True</code>，则只有name不存在的时，当前<code>set</code>操作才执行(新建)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line">client.set(<span class="string">'food'</span>,<span class="string">'mutton'</span>,ex=<span class="number">2</span>) <span class="comment"># key是food，value是mutton,将键值对存入redis缓存</span></span><br><span class="line">time.sleep(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># 如果键food不存在，返回True；如果键food存在，返回None</span></span><br><span class="line">print(client.set(<span class="string">'food'</span>,<span class="string">'egg'</span>,nx=<span class="literal">True</span>)) <span class="comment"># True</span></span><br><span class="line">print(client.get(<span class="string">'food'</span>))  <span class="comment"># egg</span></span><br></pre></td></tr></table></figure></p>
+<p>4.<code>xx</code>,如果设置为<code>True</code>, 则只有name存在时，当前<code>set</code>操作才执行(修改)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(client.set(<span class="string">'food'</span>,<span class="string">"egg"</span>,xx=<span class="literal">True</span>)) <span class="comment"># True,已经存在</span></span><br><span class="line"><span class="comment"># 当键food已经存在，返回True;当键food不存在，返回None</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="列表的创建，查询和修改"><a href="#列表的创建，查询和修改" class="headerlink" title="列表的创建，查询和修改"></a>列表的创建，查询和修改</h1><p><strong>插入数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line">client.lpush(<span class="string">'example_list_python'</span>,<span class="string">'python'</span>)</span><br><span class="line"><span class="comment"># 插入多条数据方法一:</span></span><br><span class="line">client.rpush(<span class="string">'example_list_python'</span>,<span class="string">'life is short'</span>,<span class="string">'first'</span>,<span class="string">'second'</span>)</span><br><span class="line"><span class="comment"># 插入多条数据方法二:</span></span><br><span class="line">datas = [<span class="string">'one'</span>,<span class="string">'two'</span>,<span class="string">'three'</span>,<span class="string">'four'</span>]</span><br><span class="line">client.lpush(<span class="string">'example_list_python'</span>,*datas)</span><br></pre></td></tr></table></figure></p>
+<p><strong>读取数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.查看列表长度</span></span><br><span class="line">print(client.llen(<span class="string">'example_list_python'</span>))</span><br><span class="line"><span class="comment"># 2.获取列表中一定索引范围的数据</span></span><br><span class="line">print(client.lrange(<span class="string">'example_list_python'</span>,<span class="number">0</span>,<span class="number">-1</span>))</span><br><span class="line">print(client.lrange(<span class="string">'example_list_python'</span>,<span class="number">-4</span>,<span class="number">-1</span>))</span><br><span class="line"><span class="comment"># 3.从左右侧弹出数据</span></span><br><span class="line">word_l = client.lpop(<span class="string">'example_list_python'</span>)</span><br><span class="line">print(word_l,<span class="string">':'</span>,type(word_l))</span><br><span class="line">word_2 = client.rpop(<span class="string">'example_list_python'</span>)</span><br><span class="line">print(word_2,<span class="string">':'</span>,type(word_2))</span><br></pre></td></tr></table></figure></p>
+<p><strong>修改数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line"><span class="comment"># 查看列表里面所有数据</span></span><br><span class="line">client.lrange(<span class="string">'example_list_python'</span>,<span class="number">0</span>,<span class="number">-1</span>)</span><br><span class="line"><span class="comment"># 修改指定位置数据</span></span><br><span class="line">client.lset(<span class="string">'example_list_python'</span>,<span class="number">4</span>,<span class="string">'talk_is_cheap'</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="列表的应用"><a href="#列表的应用" class="headerlink" title="列表的应用"></a>列表的应用</h2><p><strong>简易分布式短信发送程序</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">client = redis.Redis(host=<span class="string">'xxx.xxx.xx.xx'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    phone_info_bytes = client.lpop(<span class="string">'phone_queue'</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> phone_info_bytes:</span><br><span class="line">        print(<span class="string">'短信发送完毕！'</span>)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    phone_info = json.loads(phone_info_bytes.decode())</span><br><span class="line">    retry_times = phone_info.get(<span class="string">'retry_times'</span>, <span class="number">0</span>)</span><br><span class="line">    phone_number = phone_info[<span class="string">'phone_number'</span>]</span><br><span class="line">    result = send_sms(phone_number)</span><br><span class="line">    <span class="keyword">if</span> result:</span><br><span class="line">        print(<span class="string">f'手机号：<span class="subst">&#123;phone_number&#125;</span> 短信发送成功！'</span>)</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> retry_times &gt;= <span class="number">3</span>:</span><br><span class="line">        print(<span class="string">f'重试超过3次，放弃手机号：<span class="subst">&#123;phone_number&#125;</span>'</span>)</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    next_phone_info = &#123;<span class="string">'phone_number'</span>: phone_number, <span class="string">'retry_times'</span>: retry_times + <span class="number">1</span>&#125;</span><br><span class="line">    client.rpush(<span class="string">'phone_queue'</span>, json.dumps(next_phone_info))</span><br></pre></td></tr></table></figure></p>
+<h1 id="集合的创建，查找和修改"><a href="#集合的创建，查找和修改" class="headerlink" title="集合的创建，查找和修改"></a>集合的创建，查找和修改</h1><p><strong>插入数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果数据已经存在时添加，返回0；在数据不存在时添加，返回1</span></span><br><span class="line">client.sadd(<span class="string">'example_set_python'</span>,<span class="string">'hello'</span>)</span><br><span class="line">client.sadd(<span class="string">'example_set_python'</span>,<span class="number">1</span>,<span class="number">2.0</span>,<span class="string">'three'</span>)</span><br><span class="line">datas = [<span class="number">9</span>,<span class="number">8.0</span>,<span class="string">'seven'</span>,<span class="string">'VI'</span>]</span><br><span class="line">client.sadd(<span class="string">'example_set_python'</span>,*datas)</span><br></pre></td></tr></table></figure></p>
+<p><strong>读取数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看集合中元素得个数</span></span><br><span class="line">count = client.scard(<span class="string">'example_set_python'</span>)</span><br><span class="line">print(<span class="string">"当前元素个数:"</span>,count)</span><br><span class="line"><span class="comment"># 使用spop从集合中获取1条数据</span></span><br><span class="line">msg = client.spop(<span class="string">'example_set_python'</span>)</span><br><span class="line">print(msg)</span><br><span class="line">print(<span class="string">'集合剩余元素个数&#123;&#125;'</span>.format(client.scard(<span class="string">'example_set_python'</span>)))</span><br><span class="line">print(<span class="string">'--------------------'</span>)</span><br><span class="line"><span class="comment"># 在python中spop没有'count'参数，因此只能获取一条数据，如果要获取多条数据可以使用For循环来实现</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">    print(client.spop(<span class="string">'example_set_python'</span>))</span><br><span class="line">print(<span class="string">'集合剩余元素个数&#123;&#125;'</span>.format(client.scard(<span class="string">'example_set_python'</span>)))</span><br><span class="line"><span class="comment"># 获取集合中全部数据</span></span><br><span class="line">all_data = client.smembers(<span class="string">'example_set_python'</span>)</span><br><span class="line">print(type(all_data)  <span class="comment"># &lt;class 'set'&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>删除数据</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line">datas = [<span class="number">1</span>,<span class="number">2</span>,<span class="string">'hello'</span>,<span class="string">'python'</span>]</span><br><span class="line">result = client.sadd(<span class="string">'example_set_python'</span>,*datas)</span><br><span class="line">print(client.smembers(<span class="string">'example_set_python'</span>))</span><br><span class="line"><span class="comment"># 删除指定数据</span></span><br><span class="line">result = client.srem(<span class="string">'example_set_python'</span>,<span class="string">"hello"</span>)</span><br><span class="line">print(<span class="string">'-------------删除后-----------------'</span>)</span><br><span class="line">print(client.smembers(<span class="string">'example_set_python'</span>))</span><br></pre></td></tr></table></figure></p>
+<p><strong>集合的运算</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>,port=<span class="number">6379</span>,decode_responses=<span class="literal">True</span>)</span><br><span class="line">client = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加数据</span></span><br><span class="line">set_datas_1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">set_datas_2 = [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>]</span><br><span class="line">client.sadd(<span class="string">'set_python1'</span>,*set_datas_1)</span><br><span class="line">client.sadd(<span class="string">'set_python2'</span>,*set_datas_2)</span><br><span class="line">print(<span class="string">'集合的交集:'</span>,client.sinter(<span class="string">'set_python1'</span>,<span class="string">'set_python2'</span>))</span><br><span class="line">print(<span class="string">'集合的并集:'</span>,client.sunion(<span class="string">'set_python1'</span>,<span class="string">'set_python2'</span>))</span><br><span class="line">print(<span class="string">'set_python1对set_python2的差集:'</span>,client.sdiff(<span class="string">'set_python1'</span>,<span class="string">'set_python2'</span>))</span><br><span class="line">print(<span class="string">'set_python2对set_python1的差集:'</span>,client.sdiff(<span class="string">'set_python2'</span>,<span class="string">'set_python1'</span>))</span><br></pre></td></tr></table></figure></p>
+<h1 id="哈希表的功能和应用"><a href="#哈希表的功能和应用" class="headerlink" title="哈希表的功能和应用"></a>哈希表的功能和应用</h1><p><strong>使用python向哈希表中添加数据</strong></p>
+<blockquote>
+<ul>
+<li>hset: 一次只能添加一个键值对,格式: client.hset(‘key’，’字段名’,’值’)</li>
+<li>hmset: 一次可以添加多个键值对,格式: client.hmset(‘key’,{‘字段名’:’值’,’字段名’:’值’})<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line"></span><br><span class="line">client.hset(<span class="string">"people_info"</span>,<span class="string">'张小二'</span>,json.dumps(&#123;<span class="string">"age"</span>:<span class="number">17</span>,<span class="string">"salary"</span>:<span class="number">100</span>,<span class="string">"address"</span>:<span class="string">"北京"</span>&#125;))</span><br><span class="line"></span><br><span class="line">other_people = &#123;</span><br><span class="line">    <span class="string">"王小三"</span>:json.dumps(&#123;<span class="string">"age"</span>:<span class="number">20</span>,<span class="string">"salary"</span>:<span class="number">9999</span>,<span class="string">"address"</span>:<span class="string">"四川"</span>&#125;),</span><br><span class="line">    <span class="string">"张小四"</span>:json.dumps(&#123;<span class="string">"age"</span>:<span class="number">30</span>,<span class="string">"salary"</span>:<span class="number">0</span>,<span class="string">"address"</span>:<span class="string">"山东"</span>&#125;)</span><br><span class="line">&#125;</span><br><span class="line">client.hmset(<span class="string">'people_info'</span>,other_people)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p><strong>使用python从哈希表中读取数据</strong></p>
+<blockquote>
+<ul>
+<li>hkeys: 用户获取所有字段的字段名，返回的数据时包含bytes型数据的列表</li>
+<li>格式： filed_names = client.hkeys(‘哈希表名’)</li>
+</ul>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line"></span><br><span class="line">field_names = client.hkeys(<span class="string">'people_info'</span>)</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> field_names:</span><br><span class="line">    print(name.decode())</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>hget: 获取一个字段的值，格式: client.hget(‘哈希表名’,’字段名’)</li>
+<li>hmget: 一次性获取多个字段的值，格式: client.hmget(‘哈希表名’,[‘字段名1’,’字段名2’,’字段名3’])</li>
+<li>hgetall: 获取一个哈希表中的所有字段名的值，格式: client.hgetall(‘哈希表名’)</li>
+</ul>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line"><span class="comment"># 获取一条数据</span></span><br><span class="line">info = client.hget(<span class="string">'people_info'</span>,<span class="string">'张小二'</span>)</span><br><span class="line">print(info.decode())</span><br><span class="line"><span class="comment"># 获取多条数据</span></span><br><span class="line">info_list = hmget(<span class="string">'people_info'</span>,[<span class="string">'王小二'</span>,<span class="string">'刘小五'</span>])</span><br><span class="line"><span class="keyword">for</span> info <span class="keyword">in</span> info_list:</span><br><span class="line">    print(info.decode())</span><br><span class="line"><span class="comment"># 获取所有字段名和值</span></span><br><span class="line">all_info = hgetall(<span class="string">'people_info'</span>)</span><br><span class="line">print(all_info)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>hget</code>方法，无论时哈希表名不存在或者字段名不存在，都会返回<code>None</code></li>
+<li><code>hmget</code>方法，如果哈希表名不存在，则返回的列表所有元素都是<code>None</code>;如果哈希表中部分字段存在，部分字段不存在，则返回值列表中不存在的字段值表示为<code>None</code></li>
+<li><code>hgetall</code>方法返回的字典中，<code>key</code>,<code>value</code>都是<code>bytes</code>型的数据，因此查询里面的结果也要使用<code>bytes</code>型的数据</li>
+</ul>
+<p><strong>使用python判断哈希表中是否存在某个字段，并获取字段数量</strong></p>
+<p>1.判断一个哈希表中是否有某个字段</p>
+<ul>
+<li>方法一: 获取这个字段的值，如果返回<code>None</code>，则这个字段就不存在</li>
+<li>方法二: 使用<code>hexists</code>方法，如果字段存在返回<code>True</code>，否则返回<code>False</code>;如果<code>key</code>不存在，则直接返回<code>False</code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> client.hexists(<span class="string">'people_info'</span>,<span class="string">'张三'</span>):</span><br><span class="line">    print(<span class="string">'存在张三这个字段'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'不存在张三这个字段'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2.查看一个哈希表中有多少个字段<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">num = client.hlen(<span class="string">'people_info'</span>)</span><br><span class="line">print(<span class="string">'people_info中一个有&#123;num&#125;个字段'</span>)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>如果哈希表名存在，则返回字段数；如果不存在，则返回0</li>
+</ul>
+<p><strong>使用哈希表记录用户在线状态</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_online_status</span><span class="params">(user_id)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    当用户登录网站时调用这个函数。在Redis中，在名为user_online_status的哈希表中添加一个字段，字段名为用户账号，值为1</span></span><br><span class="line"><span class="string">    :param user_id: 用户账号</span></span><br><span class="line"><span class="string">    :reruan: None</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    client.hset(<span class="string">'user_online_status'</span>,user_id,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_offline_status</span><span class="params">(user_id)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    当用户登出这个网站时调用这个函数。从Redis中名为user_online_status的哈希表中删除一个字段，字段名为用户账号</span></span><br><span class="line"><span class="string">    :param user_id: 用户账号</span></span><br><span class="line"><span class="string">    :reruan: None</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    client.hdel(<span class="string">'user_online_status'</span>,user_id)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_online_status</span><span class="params">(user_id)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    检查用户是否在线。如果哈希表user_online_status中存在以用户账号为名的字段，则返回True，否则返回False</span></span><br><span class="line"><span class="string">    :param user_id: 用户账号</span></span><br><span class="line"><span class="string">    :reruan: bool</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="keyword">return</span> client.hexists(<span class="string">'user_oneline_status'</span>,user_id)</span><br></pre></td></tr></table></figure></p>
+<h1 id="发布消息-订阅频道"><a href="#发布消息-订阅频道" class="headerlink" title="发布消息/订阅频道"></a>发布消息/订阅频道</h1><blockquote>
+<p>Redis的“发布订阅”模式是一种消息通信模式，实现了一对多的消息实时发布功能</p>
+</blockquote>
+<p><strong>实现一对多的消息发布</strong><br>1.使用字符串实现一对多的消息发布功能</p>
+<ul>
+<li>定好一个字符串key,例如message</li>
+<li>发送端使用字符串的set操作把新信息设置到这个key中</li>
+<li>多个接收端不停的获取message的值，如果发现值变化了，则认为来了新的消息，接收并保存</li>
+</ul>
+<p>发送端代码:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    message = input(<span class="string">'请输入需要发布的消息:'</span>)</span><br><span class="line">    now_time = datetime.datetime.now().strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">    data = &#123;<span class="string">'message'</span>:message,<span class="string">'time'</span>:now_time&#125;</span><br><span class="line">    client.set(<span class="string">'message'</span>,json.dumps(data))</span><br></pre></td></tr></table></figure></p>
+<p>接收端代码:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line">print(<span class="string">'开始接收消息'</span>)</span><br><span class="line">last_message_time = <span class="literal">None</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    data = client.get(<span class="string">'message'</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    info = json.dumps(data.decode())</span><br><span class="line">    message = info[<span class="string">'message'</span>]</span><br><span class="line">    send_time = info[<span class="string">'time'</span>]</span><br><span class="line">    <span class="keyword">if</span> send_time == last_message_time:</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    print(<span class="string">f'接到新消息:<span class="subst">&#123;message&#125;</span>,发送时间为:<span class="subst">&#123;send_time&#125;</span>'</span>)</span><br><span class="line">    last_message_time = send_time</span><br></pre></td></tr></table></figure></p>
+<p>使用字符串的弊端:</p>
+<ul>
+<li>接收端不知道发送端什么时候发布消息，因此必须持续不断检查Redis,浪费系统资源</li>
+<li>由于轮询查询,所以消息有延迟</li>
+<li>如果发送端在1秒内连续更新10条，则后一条会覆盖前一条，而接收每秒才能获取一次数据，必然会导致最多漏掉9条数据。要减少遗漏数量就需要增加轮询效率，进一步增大系统开销。</li>
+</ul>
+<p><strong>使用Redis的发布/订阅模式实现消息通信</strong></p>
+<blockquote>
+<p>发布/订阅模式是Redis自带的一对多消息通信模式。使用订阅/发布模式不仅可以解决字符串通信遇到的各种问题，而且代码更加简洁</p>
+</blockquote>
+<p>发送端代码:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    message = input(<span class="string">'请输入要发布的消息:'</span>)</span><br><span class="line">    now_time = datetime.datetime.now().strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">    data = &#123;<span class="string">'message'</span>:message,<span class="string">'time'</span>:now_time&#125;</span><br><span class="line">    client.publish(<span class="string">'pubinfo'</span>,json.dumps(data))</span><br></pre></td></tr></table></figure></p>
+<p>接收端代码:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line"><span class="comment"># 生成一个发布/订阅对象，并忽略订阅成功的消息</span></span><br><span class="line">listener = client.pubsub(ignore_subscrible_messages=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 订阅名为pubinfo的频道</span></span><br><span class="line">listener.subscribe(<span class="string">'pubinfo'</span>)</span><br><span class="line"><span class="keyword">for</span> message <span class="keyword">in</span> listener.listen():</span><br><span class="line">    data = json.loads(message[<span class="string">'data'</span>].decode())</span><br><span class="line">    print(<span class="string">f'接收到的信息:<span class="subst">&#123;data[<span class="string">"message"</span>]&#125;</span>,发送时间为:<span class="subst">&#123;data[<span class="string">"time"</span>]&#125;</span>'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>在Python中发布消息/订阅频道</strong><br>1.发布消息<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用python向一个频道发布消息: client.publish('频道名','消息')</span></span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line">client = redis.Redis()</span><br><span class="line">client.publish(<span class="string">'pubinfo'</span>,<span class="string">'message'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>2.订阅频道</p>
+<blockquote>
+<p>订阅频道设计的步骤稍微要多一些。首先需要生成一个发布/订阅对象，然后使用这个对象来订阅频道。订阅频道之后，循环从频道里面获取数据。</p>
+</blockquote>
+<ul>
+<li>一个订阅实例只订阅一个频道<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">listener = client.pubsub()</span><br><span class="line">instener.subcribe(<span class="string">'频道名'</span>)</span><br><span class="line"><span class="comment"># instener.listen()是一个阻塞式的方法。程序运行到这里，如果频道里面没有数据，则程序会阻塞，知道频道里面有了新的信息，才会继续运行后面的代码</span></span><br><span class="line"><span class="keyword">for</span> message <span class="keyword">in</span> instener.listen():</span><br><span class="line">    <span class="comment"># 第一次进入for循环，数据为&#123;'type':'subscribe','pattern':None,'channel':b'pubinfo','data':1&#125;</span></span><br><span class="line">    <span class="comment"># 这条消息表明订阅'pubinfo'成功,如果不想显示这一条内容，则在初始化发布订阅对象时，指定ignore_subscribe_messages=True</span></span><br><span class="line">    print(<span class="string">'每一条消息'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>3.在一个发布订阅实例中订阅多个频道<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">client = redis.Redis()</span><br><span class="line">listener = client.pubsub(ignore_subscribe_messages=<span class="literal">True</span>)</span><br><span class="line">listener.subscribe(<span class="string">'computer'</span>,<span class="string">'math'</span>,<span class="string">'shopping'</span>)</span><br><span class="line"><span class="keyword">for</span> message <span class="keyword">in</span> listener.listen():</span><br><span class="line">    channel = message[<span class="string">'channel'</span>].decode()</span><br><span class="line">    data = message[<span class="string">'data'</span>].decode()</span><br><span class="line">    print(<span class="string">f'频道:<span class="subst">&#123;channel&#125;</span>发送了一条消息:<span class="subst">&#123;data&#125;</span>'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>注意事项:</p>
+<ul>
+<li>‘发布/订阅’模式的工作工程就像收音机的广播一样，只有订阅到这个频道，才能收到消息，而之前的消息都丢失了。如:发送端先发送10条信息，在启动接收端，而接收端是没有办法收到先发送的10条信息的</li>
+<li>可以有非常多的接收端同时订阅一个频道。一旦这个频道有消息发布，所有接收端都会收到信息。</li>
+</ul>
+<h1 id="有序集合"><a href="#有序集合" class="headerlink" title="有序集合"></a>有序集合</h1><blockquote>
+<p>有序集合(<code>sorted set</code>)是Redis的一个数据结构。<br>有序集合里面的数据跟集合一样，也是不能重复的，但是每一个元素又关联了一个分数，根据这个分数可以对元素进行排序，分数可以重复。</p>
+</blockquote>
+<p><strong>实现排行榜功能</strong></p>
+<blockquote>
+<p>分别用MongoDB和Redis的有序集合来实现排行榜功能。对比传统数据库的排序功能，寻找有序集合实现排序功能的优点</p>
+</blockquote>
+<p>1.使用传统数据库实现排行榜<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line">handler = pymongo.MongoClient().chapter_9.rank_data</span><br><span class="line">result = handler.find(&#123;&#125;).sort(<span class="string">'score'</span>,<span class="number">-1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>使用数据库排序的弊端：</p>
+<ul>
+<li>排行榜会实时更新，数据每一次变化都需要排序，会对数据库性能造成影响</li>
+<li>频繁更新数据，导致数据库性能下降</li>
+<li>数据量太大时，排序时间缓慢</li>
+<li>对被排序字段添加索引会占更多空间</li>
+</ul>
+<p>2.使用有序集合进行排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 直接把mongodb中的数据导入redis中名为rank的有序集合</span></span><br><span class="line">handler = pymongo.MongoClient(<span class="string">'mongodb://root:iamsuperuser@localhost'</span>).chapter_9.rank_data</span><br><span class="line">client = redis.Redis()</span><br><span class="line"></span><br><span class="line">rows = handler.find(&#123;&#125;,&#123;<span class="string">'_id'</span>:<span class="number">0</span>&#125;)</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">    client.zadd(<span class="string">'rank'</span>,row[<span class="string">'user_id'</span>],row[<span class="string">'score'</span>])</span><br><span class="line"><span class="comment"># 显示某个特定用户的排名</span></span><br><span class="line">position = client.zrevrank(<span class="string">'rank'</span>,<span class="number">10017</span>)</span><br><span class="line">print(<span class="string">f'用户:10017排名为<span class="subst">&#123;position + <span class="number">1</span>&#125;</span>'</span>)</span><br><span class="line"><span class="comment"># 显示全部用户的排名</span></span><br><span class="line">rank = client.zervrank(<span class="string">'rank'</span>,<span class="number">0</span>,<span class="number">10000</span>,withscores=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用Python读写有序集合</strong><br>1.向有序集合添加数据</p>
+<ul>
+<li>方法一: <code>client.zadd(&#39;有序集合名&#39;,&#39;值1&#39;,&#39;评分1&#39;,&#39;值2&#39;,&#39;评分2&#39;)</code></li>
+<li>方法二: <code>client.zadd(&#39;有序集合&#39;,值1=评分1,值2=评分2)</code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name1 = <span class="string">'王小二'</span></span><br><span class="line">name2 = <span class="string">'张三'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 值与评分都可以用变量，也可以直接写</span></span><br><span class="line">client.zadd(<span class="string">'age_rank'</span>,name1,<span class="number">18</span>,name2,<span class="number">26</span>,<span class="string">'小明'</span>,<span class="number">10</span>)</span><br><span class="line"><span class="comment"># 只能写值，不能用变量，但评分可以使用变量</span></span><br><span class="line">client.zadd(<span class="string">'age_rank'</span>,王小二=<span class="number">18</span>,张三=<span class="number">26</span>,小明=<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2.修改评分</p>
+<blockquote>
+<p>修改评分使用的方法是<code>zincrby</code>,格式: <code>client.zincrby(&#39;有序集合名&#39;,值,该变量)</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">client.zincrby(<span class="string">'age_rank'</span>,<span class="string">'王小二'</span>,<span class="number">3</span>)</span><br><span class="line">client.zincrby(<span class="string">'age_rank'</span>,<span class="string">'小明'</span>,<span class="number">-0.5</span>)</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>3.对有序集合元素基于评分范围进行排序</p>
+<blockquote>
+<p>根据评分范围进行排序，使用的方法分别是<code>zrangebyscore</code>和<code>zrevrangebyscore</code>,这两个方法用法完全相同，差别在于:</p>
+<ul>
+<li>zrangebyscore根据评分从小到大的顺序排序</li>
+<li>zrevrangebyscore根据评分从大到小的顺序排序</li>
+</ul>
+</blockquote>
+<p>格式：</p>
+<ul>
+<li><code>client.zrangebyscore(&#39;有序集合名&#39;,评分上限，评分下限，结果切片起始位置，结果数量，withscores=False)</code></li>
+<li><code>client.arevrangebyscore(&#39;有序集合名&#39;,评分上限，评分下限，结果切片起始位置，结果数量，withscores=False)</code></li>
+</ul>
+<blockquote>
+<p>如果<code>withscores</code>为<code>False</code>返回的结果是直接排序好的值；如果<code>withscores</code>为<code>True</code>，则返回的列表里面的元素是元组，元组第一个元素是值，第二个元素是评分</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对积分在10-100范围内的人员进行倒序排序，并返回前3条数据</span></span><br><span class="line">client.zrevrangebyscore(<span class="string">'rank'</span>,<span class="number">100</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>4.对有序集合基于位置进行排序</p>
+<blockquote>
+<p>基于位置范围进行排序，用到的方法名为:<code>zrange</code>和<code>zrevrange</code></p>
+<ul>
+<li>zrange对评分按照从小到大的顺序排序</li>
+<li>zrevrange对评分按照从大到小的顺序排序</li>
+</ul>
+</blockquote>
+<p>格式:</p>
+<ul>
+<li>client.zrange(‘有序集合名’,开始位置(含),结束位置(含),desc=False,withsocres=False)</li>
+<li><p>client.zrevrange(‘有序集合名’,开始位置(含),结束位置(含),withscores=False)</p>
+</li>
+<li><p><code>zrange()</code>方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果使用的是zrange方法，则位置0是评分最小的元素，</span></span><br><span class="line"><span class="comment"># 当然开始位置和结束位置也可以是负数，表示从后往前数，例如开始位置-4,结束位置-1</span></span><br><span class="line">result = client.zrange(<span class="string">'rank'</span>,<span class="number">0</span>,<span class="number">4</span>,withscores=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">for</span> index,one <span class="keyword">in</span> enumerate(result):</span><br><span class="line">    print(<span class="string">f'用户id:<span class="subst">&#123;one[<span class="number">0</span>].decode()&#125;</span>,积分:<span class="subst">&#123;one[<span class="number">1</span>]&#125;</span>,排行榜第<span class="subst">&#123;index + <span class="number">1</span>&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>zrevrange()</code>方法</p>
+<blockquote>
+<p>使用zrevrange方法，位置0是最大的元素,如果开始位置写0，结束位置写4，最取最大的5个元素<br>如果开始位置取-4，结束位置取-1，则取最小的4个元素，且Score高的在前</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rank_100_1000 = client.zrevrange(<span class="string">'rank'</span>,<span class="number">0</span>,<span class="number">4</span>,withscores=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">for</span> index,one <span class="keyword">in</span> enumerate(rank_100_1000):</span><br><span class="line">    print(<span class="string">f'用户id:<span class="subst">&#123;one[<span class="number">0</span>].decode()&#125;</span>,积分:<span class="subst">&#123;one[<span class="number">1</span>]&#125;</span>,排行榜第<span class="subst">&#123;index + <span class="number">1</span>&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
+<p>5.根据值查询排名，根据值查询评分</p>
+<ul>
+<li>使用<code>zrank</code>和<code>zrevrank</code>方法，可以查询一个值在有序列表中的排名<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># client.zrank('有序列表名','值'),如果值存在，则返回值的排名，最小值为0；如果值不存在则返回None</span></span><br><span class="line">client.zrank(<span class="string">'rank'</span>,<span class="string">'张三'</span>)</span><br><span class="line"><span class="comment"># client.zrevrank('有序列表名','值'),如果值存在，则返回值的排名，最大值为0；如果值不存在则返回None</span></span><br><span class="line">client.zrevrank(<span class="string">'rank'</span>,<span class="string">'张三'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>6.其它常用方法</p>
+<ul>
+<li><code>zcard</code>: 查询有序集合里面一共有多少个值，如果有序集合不存在返回0,格式:<code>zcard(&#39;有序集合名&#39;)</code></li>
+<li><code>zcount</code>: 查询在某个评分范围内有多少个值，格式:<code>zcount(&#39;有序集合名&#39;,评分上限，评分下限)</code></li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><blockquote>
+<ul>
+<li><a href="https://www.jianshu.com/p/2639549bedc8" rel="external nofollow noopener noreferrer" target="_blank">使用Python来操作redis用法详解</a></li>
+</ul>
+</blockquote>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/Database/MongoDB/mongoengine/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    mongoengine
+                
+            </div>
+        </a>
+    
+    
+        <a href="/Database/Redis/Redis快速上手/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Redis快速上手</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Saltci &copy; 2020 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
